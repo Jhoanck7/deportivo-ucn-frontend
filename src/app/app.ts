@@ -12,11 +12,12 @@ import { CommonModule } from '@angular/common';
 })
 export class App implements OnInit {
   protected readonly title = signal('deportivo-ucn-frontend');
+  private readonly apiUrl = 'http:localhost:5059/api/test'
   private http = inject(HttpClient);
   backendMessage: string = '';
   //
   ngOnInit(): void {
-    this.http.get<any>('http://localhost:5059/api/test')
+    this.http.get<any>(this.apiUrl)
       .subscribe({
         next: (response) => {
           this.backendMessage = response.mensaje;
