@@ -106,7 +106,7 @@
 }
 
 .login-form {
-  max-width: 410px;
+  max-width: 420px;
   width: 100%;
   margin: 0 auto;
 }
@@ -148,7 +148,7 @@
 }
 
 .input-wrapper input {
-  width: 100%;
+  width: 92%;
   padding: 0.85rem 1rem;
   border: 1px solid #cbd5e1;
   border-radius: 10px;

@@ -29,6 +29,5 @@ export class LoginComponent {
 
   loginWithGoogle(): void {
     console.log('Login with Google triggered');
-    this.router.navigate(['/dashboard']);
   }
 }
