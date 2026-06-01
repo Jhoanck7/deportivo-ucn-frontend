@@ -16,15 +16,24 @@ export class LoginComponent {
   email = '';
   password = '';
   showPassword = false;
+  selectedRole: 'admin' | 'user' = 'user';
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 
   onSubmit(): void {
-    // Simular login exitoso y navegar al panel principal
-    console.log('Login intent with:', this.email, 'password length:', this.password.length);
-    this.router.navigate(['/dashboard']);
+    console.log('Login intent with:', this.email, 'role:', this.selectedRole);
+    // Auto-detect admin role if email contains 'admin'
+    if (this.email.toLowerCase().includes('admin')) {
+      this.selectedRole = 'admin';
+    }
+    
+    if (this.selectedRole === 'admin') {
+      this.router.navigate(['/dashboard/admin']);
+    } else {
+      this.router.navigate(['/dashboard/user']);
+    }
   }
 
   loginWithGoogle(): void {

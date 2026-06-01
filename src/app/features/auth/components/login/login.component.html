@@ -19,6 +19,26 @@
       <p class="form-subtitle">Inicia sesión con alguna de las opciones disponibles</p>
 
       <form (ngSubmit)="onSubmit()" #form="ngForm">
+        <!-- Selector de Rol (Segmented Control) -->
+        <div class="role-selector">
+          <button 
+            type="button" 
+            class="role-btn" 
+            [class.active]="selectedRole === 'user'" 
+            (click)="selectedRole = 'user'"
+          >
+            Socio / Usuario
+          </button>
+          <button 
+            type="button" 
+            class="role-btn" 
+            [class.active]="selectedRole === 'admin'" 
+            (click)="selectedRole = 'admin'"
+          >
+            Administrador
+          </button>
+        </div>
+
         <!-- Campo: Email -->
         <div class="form-group">
           <label for="email">Email</label>
