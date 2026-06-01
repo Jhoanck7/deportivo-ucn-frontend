@@ -1,0 +1,31 @@
+<main class="home-container">
+  <!-- Sección Hero -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>{{ heroTitle() }}</h1>
+      <p>{{ heroSubtitle() }}</p>
+      <img ><img>
+      <div class="hero-actions">
+        <!--button routerLink="/login" class="btn btn-primary">Iniciar Sesión</!--button-->
+        <!--button routerLink="/register" class="btn btn-secondary">Registrarse</!--button-->
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Características -->
+  <section class="features-section">
+    <h2>Nuestros Servicios</h2>
+    
+    <div class="features-grid">
+      @for (feature of features(); track feature.title) {
+        <article class="feature-card">
+          <span class="material-icons feature-icon">{{ feature.icon }}</span>
+          <h3>{{ feature.title }}</h3>
+          <p>{{ feature.description }}</p>
+        </article>
+      } @empty {
+        <p>No hay servicios disponibles en este momento.</p>
+      }
+    </div>
+  </section>
+</main>
