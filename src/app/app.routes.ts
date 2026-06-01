@@ -5,11 +5,7 @@ import { AdminDashboardComponent } from './features/dashboard/admin/components/a
 import { UserDashboardComponent } from './features/dashboard/user/components/user-dashboard.component';
 
 export const routes: Routes = [
-    {
-        path: 'home',
-        component: HomePageComponent
-    }
-
+  { path: 'home', component: HomePageComponent},
   { path: 'login', component: LoginComponent },
   { path: 'dashboard/admin', component: AdminDashboardComponent },
   { path: 'dashboard/user', component: UserDashboardComponent },
