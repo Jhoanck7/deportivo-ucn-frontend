@@ -39,6 +39,11 @@ export interface RamaDeportiva {
   colorFondoIcono: string;
 }
 
+export interface Deportista {
+  id: string;
+  nombre: string;
+}
+
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
@@ -66,6 +71,14 @@ export class AdminDashboardComponent implements OnInit {
   ramasDeportivas: RamaDeportiva[] = [];
   isLoadingRamas: boolean = false;
   ramasErrorMessage: string = '';
+
+  // Sub-Nominas navigation
+  activeSubNominas: 'ramas' | 'deportistas' = 'ramas';
+
+  // Deportistas State
+  deportistas: Deportista[] = [];
+  isLoadingDeportistas: boolean = false;
+  deportistasErrorMessage: string = '';
 
   // Data lists
   reservasTotales: Reserva[] = [
@@ -205,6 +218,7 @@ export class AdminDashboardComponent implements OnInit {
     this.checkBackendConnection();
     this.updateFiltradoYPagina();
     this.loadRamasDeportivas();
+    this.loadDeportistas();
   }
 
   checkBackendConnection(): void {
@@ -343,6 +357,64 @@ export class AdminDashboardComponent implements OnInit {
 
   exportRamasReport(): void {
     alert('Generando y exportando reporte consolidado de Nóminas y Programas Deportivos (Ramas UCN) en formato Excel/CSV...');
+  }
+
+  loadDeportistas(): void {
+    this.isLoadingDeportistas = true;
+    this.deportistasErrorMessage = '';
+    
+    this.http.get<Deportista[]>('http://localhost:5059/api/deportistas')
+      .subscribe({
+        next: (data) => {
+          this.deportistas = data;
+          this.isLoadingDeportistas = false;
+          console.log('Deportistas cargados desde backend:', data);
+        },
+        error: (err) => {
+          console.warn('Fallo al conectar con endpoint de deportistas. Cargando datos locales (graceful fallback)...', err);
+          this.deportistasErrorMessage = 'Conexión con backend fallida. Mostrando datos offline.';
+          this.isLoadingDeportistas = false;
+          
+          this.deportistas = [
+            { id: 'DEP-001', nombre: 'Juan Pérez' },
+            { id: 'DEP-002', nombre: 'Camila González' },
+            { id: 'DEP-003', nombre: 'Sebastián Rojas' },
+            { id: 'DEP-004', nombre: 'Valentina Muñoz' },
+            { id: 'DEP-005', nombre: 'Diego Contreras' },
+            { id: 'DEP-006', nombre: 'Fernanda Torres' },
+            { id: 'DEP-007', nombre: 'Matías Herrera' },
+            { id: 'DEP-008', nombre: 'Nicolás Fuentes' },
+            { id: 'DEP-009', nombre: 'Camilo Jofre' }
+          ];
+        }
+      });
+  }
+
+  addDeportista(): void {
+    const nombre = prompt('Ingresar el nombre completo del nuevo deportista:');
+    if (nombre !== null && nombre.trim() !== '') {
+      const nuevo: Deportista = {
+        id: `DEP-0${this.deportistas.length + 1}`,
+        nombre: nombre.trim()
+      };
+      this.deportistas.unshift(nuevo); // Agregar al inicio como en el mockup
+      alert(`Deportista "${nombre}" agregado exitosamente.`);
+    }
+  }
+
+  editDeportista(dep: Deportista): void {
+    const nuevoNombre = prompt(`Editar nombre de ${dep.nombre}:`, dep.nombre);
+    if (nuevoNombre !== null && nuevoNombre.trim() !== '') {
+      dep.nombre = nuevoNombre.trim();
+      alert('Nombre del deportista actualizado exitosamente.');
+    }
+  }
+
+  deleteDeportista(dep: Deportista): void {
+    if (confirm(`¿Estás seguro de que deseas eliminar al deportista "${dep.nombre}"?`)) {
+      this.deportistas = this.deportistas.filter(d => d.id !== dep.id);
+      alert('Deportista eliminado exitosamente.');
+    }
   }
 
   updateFiltradoYPagina(): void {

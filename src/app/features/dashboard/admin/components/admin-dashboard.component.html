@@ -306,7 +306,7 @@
     <main class="content-viewport nominas-viewport" *ngIf="activeMenu === 'nominas'">
       
       <!-- Fila de título de Nóminas -->
-      <section class="content-header">
+      <section class="content-header" style="margin-bottom: 1.5rem;">
         <div class="header-titles">
           <h2>GESTIÓN DE NÓMINAS</h2>
           <p>Control operativo de programas de ramas deportivas.</p>
@@ -314,7 +314,7 @@
         
         <div style="display: flex; gap: 1rem; align-items: center;">
           <!-- Mensaje de estado de backend offline si es necesario -->
-          <div *ngIf="ramasErrorMessage" class="status-badge backend-err" style="font-size: 0.72rem; padding: 0.4rem 0.8rem;" [title]="ramasErrorMessage">
+          <div *ngIf="ramasErrorMessage && activeSubNominas === 'ramas'" class="status-badge backend-err" style="font-size: 0.72rem; padding: 0.4rem 0.8rem;" [title]="ramasErrorMessage">
             <span class="status-dot"></span>
             <span>DATOS LOCALES</span>
           </div>
@@ -326,98 +326,151 @@
         </div>
       </section>
 
-      <!-- Tabla Principal: Active Sport Branches -->
-      <section class="table-card nominas-table-card">
-        <div class="card-header table-card-header">
-          <div style="display: flex; align-items: center; gap: 0.6rem;">
-            <!-- Icono de operaciones o rama -->
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-            <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Active Sport Branches</h3>
+      <!-- Sub-navegación segmentada: Ramas vs Deportistas -->
+      <div class="sub-nominas-tabs">
+        <button 
+          class="sub-tab-btn" 
+          [class.active]="activeSubNominas === 'ramas'" 
+          (click)="activeSubNominas = 'ramas'"
+        >
+          Gestionar Ramas Deportivas
+        </button>
+        <button 
+          class="sub-tab-btn" 
+          [class.active]="activeSubNominas === 'deportistas'" 
+          (click)="activeSubNominas = 'deportistas'"
+        >
+          Gestionar Deportistas (Socios)
+        </button>
+      </div>
+
+      <!-- VISTA SUB-TAB: GESTIONAR RAMAS DEPORTIVAS -->
+      <ng-container *ngIf="activeSubNominas === 'ramas'">
+        <!-- Tabla Principal: Active Sport Branches -->
+        <section class="table-card nominas-table-card">
+          <div class="card-header table-card-header">
+            <div style="display: flex; align-items: center; gap: 0.6rem;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Active Sport Branches</h3>
+            </div>
+            <span class="badge badge-feed" style="font-weight: 800; font-size: 0.68rem; padding: 0.35rem 0.75rem;">LIVE OPERATIONS</span>
           </div>
-          <span class="badge badge-feed" style="font-weight: 800; font-size: 0.68rem; padding: 0.35rem 0.75rem;">LIVE OPERATIONS</span>
-        </div>
 
-        <div class="table-container">
-          <table class="nominas-table">
-            <thead>
-              <tr>
-                <th>BRANCH NAME</th>
-                <th>ASSIGNED DT</th>
-                <th>WEEKLY SCHEDULE</th>
-                <th>CAPACITY</th>
-                <th>ACTIONS</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (rama of ramasDeportivas; track rama.id) {
-                <tr class="table-row">
-                  <!-- Rama Name and Icon -->
-                  <td class="rama-name-cell">
-                    <div style="display: flex; align-items: center; gap: 1rem;">
-                      <div class="icon-circle" [style.background-color]="rama.colorFondoIcono">
-                        {{ rama.icono }}
-                      </div>
-                      <span class="rama-title-text">{{ rama.nombre }}</span>
-                    </div>
-                  </td>
-                  
-                  <!-- Assigned DT -->
-                  <td class="dt-cell">{{ rama.dtAsignado }}</td>
-                  
-                  <!-- Weekly Schedule -->
-                  <td class="schedule-cell">
-                    <div class="schedule-days">{{ rama.horario.split('\n')[0].trim() }}</div>
-                    <div class="schedule-hours" *ngIf="rama.horario.includes('\n')">{{ rama.horario.split('\n')[1].trim() }}</div>
-                  </td>
-                  
-                  <!-- Capacity / Slots progress bar -->
-                  <td class="capacity-cell">
-                    <div class="capacity-wrapper">
-                      <!-- Slots fill bar -->
-                      <div class="progress-bar-container">
-                        <!-- Red color if > 90% full, Orange otherwise -->
-                        <div class="progress-bar-fill" 
-                             [style.width.%]="(rama.slotsUsados / rama.slotsMax) * 100" 
-                             [class.almost-full]="(rama.slotsUsados / rama.slotsMax) >= 0.9">
+          <div class="table-container">
+            <table class="nominas-table">
+              <thead>
+                <tr>
+                  <th>BRANCH NAME</th>
+                  <th>ASSIGNED DT</th>
+                  <th>WEEKLY SCHEDULE</th>
+                  <th>CAPACITY</th>
+                  <th>ACTIONS</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (rama of ramasDeportivas; track rama.id) {
+                  <tr class="table-row">
+                    <td class="rama-name-cell">
+                      <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div class="icon-circle" [style.background-color]="rama.colorFondoIcono">
+                          {{ rama.icono }}
                         </div>
+                        <span class="rama-title-text">{{ rama.nombre }}</span>
                       </div>
-                      <!-- Raw details -->
-                      <span class="capacity-label" [class.almost-full-text]="(rama.slotsUsados / rama.slotsMax) >= 0.9">
-                        {{ rama.slotsUsados }}/{{ rama.slotsMax }} SLOTS
-                        <span class="almost-full-tag" *ngIf="(rama.slotsUsados / rama.slotsMax) >= 0.9"> (ALMOST FULL)</span>
-                      </span>
-                    </div>
-                  </td>
-                  
-                  <!-- Actions -->
-                  <td class="actions-cell">
-                    <div class="actions-wrapper">
-                      <button class="btn-action btn-edit" (click)="editRama(rama)" title="Editar DT">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
-                      </button>
-                      <button class="btn-action btn-delete" (click)="deleteRama(rama)" title="Eliminar Rama">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              }
+                    </td>
+                    
+                    <td class="dt-cell">{{ rama.dtAsignado }}</td>
+                    
+                    <td class="schedule-cell">
+                      <div class="schedule-days">{{ rama.horario.split('\n')[0].trim() }}</div>
+                      <div class="schedule-hours" *ngIf="rama.horario.includes('\n')">{{ rama.horario.split('\n')[1].trim() }}</div>
+                    </td>
+                    
+                    <td class="capacity-cell">
+                      <div class="capacity-wrapper">
+                        <div class="progress-bar-container">
+                          <div class="progress-bar-fill" 
+                               [style.width.%]="(rama.slotsUsados / rama.slotsMax) * 100" 
+                               [class.almost-full]="(rama.slotsUsados / rama.slotsMax) >= 0.9">
+                          </div>
+                        </div>
+                        <span class="capacity-label" [class.almost-full-text]="(rama.slotsUsados / rama.slotsMax) >= 0.9">
+                          {{ rama.slotsUsados }}/{{ rama.slotsMax }} SLOTS
+                          <span class="almost-full-tag" *ngIf="(rama.slotsUsados / rama.slotsMax) >= 0.9"> (ALMOST FULL)</span>
+                        </span>
+                      </div>
+                    </td>
+                    
+                    <td class="actions-cell">
+                      <div class="actions-wrapper">
+                        <button class="btn-action btn-edit" (click)="editRama(rama)" title="Editar DT">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                        </button>
+                        <button class="btn-action btn-delete" (click)="deleteRama(rama)" title="Eliminar Rama">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
 
-              @if (ramasDeportivas.length === 0 && !isLoadingRamas) {
-                <tr>
-                  <td colspan="5" class="no-records-cell">No se encontraron ramas deportivas cargadas.</td>
-                </tr>
-              }
+                @if (ramasDeportivas.length === 0 && !isLoadingRamas) {
+                  <tr>
+                    <td colspan="5" class="no-records-cell">No se encontraron ramas deportivas cargadas.</td>
+                  </tr>
+                }
 
-              @if (isLoadingRamas) {
-                <tr>
-                  <td colspan="5" class="no-records-cell">Cargando nóminas desde Deportes UCN...</td>
-                </tr>
-              }
-            </tbody>
-          </table>
+                @if (isLoadingRamas) {
+                  <tr>
+                    <td colspan="5" class="no-records-cell">Cargando nóminas desde Deportes UCN...</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </ng-container>
+
+      <!-- VISTA SUB-TAB: GESTIONAR DEPORTISTAS -->
+      <ng-container *ngIf="activeSubNominas === 'deportistas'">
+        <!-- Fila de Cabecera del Listado de Deportistas -->
+        <div class="deportistas-header">
+          <h2 class="deportistas-section-title">Gestionar Deportistas</h2>
+          <button class="btn-add-deportista" (click)="addDeportista()">
+            Agregar deportista
+          </button>
         </div>
-      </section>
+
+        <div *ngIf="deportistasErrorMessage" class="status-badge backend-err" style="font-size: 0.72rem; padding: 0.4rem 0.8rem; margin-bottom: 1.5rem; width: fit-content;" [title]="deportistasErrorMessage">
+          <span class="status-dot"></span>
+          <span>DATOS LOCALES</span>
+        </div>
+
+        <!-- Listado de Deportistas con Tarjetas de Alta Fidelidad del Mockup -->
+        <div class="deportistas-list">
+          @for (dep of deportistas; track dep.id) {
+            <div class="deportista-card">
+              <span class="deportista-name">{{ dep.nombre }}</span>
+              <div class="deportista-actions">
+                <button class="btn-action-navy" (click)="editDeportista(dep)">Editar</button>
+                <button class="btn-action-danger-red" (click)="deleteDeportista(dep)">Borrar</button>
+              </div>
+            </div>
+          }
+
+          @if (deportistas.length === 0 && !isLoadingDeportistas) {
+            <div class="no-records-cell" style="padding: 3rem; background-color: white; border-radius: 12px; border: 1px solid #cbd5e1; text-align: center;">
+              No se encontraron deportistas registrados.
+            </div>
+          }
+
+          @if (isLoadingDeportistas) {
+            <div class="no-records-cell" style="padding: 3rem; background-color: white; border-radius: 12px; border: 1px solid #cbd5e1; text-align: center;">
+              Cargando deportistas desde Deportes UCN...
+            </div>
+          }
+        </div>
+      </ng-container>
 
     </main>
 
