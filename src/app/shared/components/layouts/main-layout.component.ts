@@ -1,0 +1,30 @@
+import { Component } from "@angular/core";
+import { RouterOutlet } from "@angular/router";
+import { NavbarComponent } from "../navbar/navbar.component";
+
+@Component({
+    selector: 'app-main-layout',
+    standalone: true,
+    imports: [RouterOutlet, NavbarComponent],
+    template: `
+        <div class="app-container">
+        <app-navbar></app-navbar>
+      
+        <!-- Aquí es donde Angular cargará dinámicamente el Home, Members, Activities, etc. -->
+        <main class="main-content">
+            <router-outlet></router-outlet>
+        </main>
+        </div>
+    `,
+    styles: `.app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .main-content {
+      flex: 1;
+      width: 100%; 
+    }`,
+})
+
+export class MainLayoutComponent {}

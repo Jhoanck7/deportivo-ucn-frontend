@@ -1,0 +1,27 @@
+<nav class="navbar">
+    <!--brand-->
+    <div class="navbar-brand">
+        <a>DeportivoUcn</a>
+    </div>
+    <!--menu-->
+    <ul class="navbar-links">
+        @for (item of visibleMenuItems(); track item.routerLink) {
+            <li>
+                <a routerLink="{{ item.routerLink }}">{{ item.label }}</a>
+            </li>
+        }
+    </ul>
+<!-- Estado del usuario / Acciones de Sesión -->
+  <div class="navbar-actions">
+    @if (isAuthenticated()) {
+      <span class="user-badge">{{ currentUser()?.username }} ({{ currentUser()?.role }})</span>
+      <button (click)="logout()" class="btn-logout">Salir</button>
+    } @else {
+      <!-- Selectores de prueba rápida para que verifiques cómo cambia el Navbar en vivo -->
+      <div class="demo-login-buttons">
+        <button (click)="changeRole('admin')">Simular Admin</button>
+        <button (click)="changeRole('user')">Simular Miembro</button>
+      </div>
+    }
+  </div>
+</nav>
