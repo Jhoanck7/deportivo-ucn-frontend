@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { HomePageComponent } from './features/home/pages/home-page/home-page.component';
 import { LoginComponent } from './features/auth/components/login/login.component';
 import { AdminDashboardComponent } from './features/dashboard/admin/components/admin-dashboard.component';
 import { UserDashboardComponent } from './features/dashboard/user/components/user-dashboard.component';

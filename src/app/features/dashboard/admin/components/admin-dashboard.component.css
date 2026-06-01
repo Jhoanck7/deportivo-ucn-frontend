@@ -1350,3 +1350,313 @@
   border-color: #fca5a5;
 }
 
+/* ==========================================================================
+   SUB-NÓMINAS NAVIGATION TABS STYLING
+   ========================================================================== */
+.sub-nominas-tabs {
+  display: flex;
+  gap: 1.5rem;
+  border-bottom: 1.5px solid #cbd5e1;
+  margin-bottom: 2.2rem;
+  padding-bottom: 0.5rem;
+}
+
+.sub-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 0.6rem 0.5rem;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.sub-tab-btn:hover {
+  color: #0f172a;
+}
+
+.sub-tab-btn.active {
+  color: #0e1e4a;
+  font-weight: 850;
+}
+
+.sub-tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #0e1e4a;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   GESTOR DE DEPORTISTAS STYLING
+   ========================================================================== */
+.deportistas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.deportistas-section-title {
+  font-size: 2.2rem;
+  font-weight: 850;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.btn-add-deportista {
+  background-color: #0e1e4a;
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  border: none;
+  padding: 0.75rem 1.6rem;
+  border-radius: 10px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(14, 30, 74, 0.15);
+  transition: var(--transition-smooth);
+}
+
+.btn-add-deportista:hover {
+  background-color: #1a2f6b;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 16px rgba(14, 30, 74, 0.25);
+}
+
+.deportistas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.deportista-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.15rem 1.5rem 1.15rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.03);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  transition: var(--transition-smooth);
+}
+
+.deportista-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
+  border-color: #bfdbfe;
+}
+
+.deportista-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #334155;
+  font-family: var(--font-family);
+}
+
+.deportista-actions {
+  display: flex;
+  gap: 0.8rem;
+}
+
+.btn-action-navy {
+  background-color: #0e1e4a;
+  color: #ffffff;
+  border: none;
+  padding: 0.65rem 1.8rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-action-navy:hover {
+  background-color: #1a2f6b;
+  transform: scale(1.03);
+}
+
+.btn-action-danger-red {
+  background-color: #ff3b30;
+  color: #ffffff;
+  border: none;
+  padding: 0.65rem 1.8rem;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-action-danger-red:hover {
+  background-color: #e0241b;
+  transform: scale(1.03);
+}
+
+/* ==========================================================================
+   FORMULARIO PREMIUM STYLING
+   ========================================================================== */
+.form-screen-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 2.5rem;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 16px -6px rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  animation: fadeInForm 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  max-width: 800px;
+  margin: 0 auto 2rem auto;
+}
+
+@keyframes fadeInForm {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .form-group {
+    max-width: 100% !important;
+  }
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #475569;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="email"],
+.form-group input[type="date"],
+.form-group input[type="tel"],
+.form-group select {
+  padding: 0.75rem 1rem;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 550;
+  color: #0f172a;
+  background-color: #f8fafc;
+  outline: none;
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.form-group input:hover,
+.form-group select:hover {
+  border-color: #94a3b8;
+  background-color: #f1f5f9;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #1e3a8a;
+  background-color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.1);
+}
+
+.form-group input.invalid {
+  border-color: #ef4444;
+  background-color: #fff5f5;
+}
+
+.form-group input.invalid:focus {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.15);
+}
+
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23475569' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.75rem center;
+  background-repeat: no-repeat;
+  background-size: 1.25rem;
+  padding-right: 2.5rem !important;
+  cursor: pointer;
+}
+
+.form-actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 1.5rem;
+}
+
+.btn-cancel-form {
+  background-color: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  padding: 0.75rem 1.6rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 750;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.btn-cancel-form:hover {
+  background-color: #e2e8f0;
+  color: #0f172a;
+  transform: translateY(-1px);
+}
+
+.btn-submit-form {
+  background-color: #0e1e4a;
+  color: #ffffff;
+  border: none;
+  padding: 0.75rem 1.8rem;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(14, 30, 74, 0.15);
+  transition: var(--transition-smooth);
+}
+
+.btn-submit-form:hover:not(:disabled) {
+  background-color: #1a2f6b;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 16px rgba(14, 30, 74, 0.25);
+}
+
+.btn-submit-form:disabled {
+  background-color: #94a3b8;
+  color: #cbd5e1;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
