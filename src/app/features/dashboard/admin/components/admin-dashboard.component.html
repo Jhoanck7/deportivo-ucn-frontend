@@ -1,0 +1,444 @@
+<div class="dashboard-container">
+  
+  <!-- Sidebar lateral -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="logo-icon"><path d="m2 22 1-1c3.4-3.4 6.8-6.8 10.2-10.2"></path><path d="M12 2a10 10 0 1 0 10 10"></path><path d="m14 14 3-3"></path><path d="m17 17 3-3"></path></svg>
+        <h1>Deportes UCN</h1>
+      </div>
+      <span class="brand-subtitle">ADMINISTRADOR</span>
+    </div>
+    
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a [class.active]="activeMenu === 'panel-principal'" (click)="setActiveMenu('panel-principal')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"></rect><rect x="14" y="3" width="7" height="5" rx="1"></rect><rect x="14" y="12" width="7" height="9" rx="1"></rect><rect x="3" y="16" width="7" height="5" rx="1"></rect></svg>
+            Panel Principal
+          </a>
+        </li>
+        <li>
+          <a [class.active]="activeMenu === 'nominas'" (click)="setActiveMenu('nominas')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            Nóminas
+          </a>
+        </li>
+        <li>
+          <a [class.active]="activeMenu === 'canchas'" (click)="setActiveMenu('canchas')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            Canchas
+          </a>
+        </li>
+        <li>
+          <a [class.active]="activeMenu === 'pagos'" (click)="setActiveMenu('pagos')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Pagos
+          </a>
+        </li>
+        <li>
+          <a [class.active]="activeMenu === 'reportes'" (click)="setActiveMenu('reportes')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            Reportes
+          </a>
+        </li>
+      </ul>
+    </nav>
+    
+    <div class="sidebar-footer">
+      <button class="btn-new-reservation" (click)="addNewReservation()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        Nueva Reserva
+      </button>
+      
+      <div class="footer-links">
+        <a class="footer-link-item" (click)="setActiveMenu('config')">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+          Configuración
+        </a>
+        <a class="footer-link-item logout-link" (click)="logout()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Cerrar Sesión
+        </a>
+      </div>
+    </div>
+  </aside>
+  
+  <!-- Contenido principal y cabecera superior -->
+  <div class="main-layout">
+    
+    <!-- Barra superior -->
+    <header class="topbar">
+      <div class="search-wrapper">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" placeholder="Buscar socio o cancha..." (input)="onSearch($event)">
+      </div>
+      
+      <div class="topbar-center">
+        <div class="time-tabs">
+          <button [class.active]="activeTimeTab === 'Hoy'" (click)="onTimeTabChange('Hoy')">Hoy</button>
+          <button [class.active]="activeTimeTab === 'Semana'" (click)="onTimeTabChange('Semana')">Semana</button>
+          <button [class.active]="activeTimeTab === 'Calendario'" (click)="onTimeTabChange('Calendario')">Calendario</button>
+        </div>
+      </div>
+      
+      <div class="topbar-right">
+        <button class="btn-whatsapp-support" (click)="onSupportClick()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="wa-icon"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+          WhatsApp Soporte
+        </button>
+        
+        <div class="action-icons">
+          <div class="icon-btn notification-wrapper">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+            <span class="notification-badge"></span>
+          </div>
+          <div class="icon-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+          </div>
+        </div>
+        
+        <div class="profile-avatar">
+          <img src="admin_avatar.png" alt="Avatar Administrador">
+        </div>
+      </div>
+    </header>
+    
+    <!-- Viewport principal de contenido: Panel Principal (activeMenu === 'panel-principal') -->
+    <main class="content-viewport" *ngIf="activeMenu === 'panel-principal'">
+      
+      <!-- Fila de título y estado del sistema -->
+      <section class="content-header">
+        <div class="header-titles">
+          <h2>Panel Principal</h2>
+          <p>Análisis en tiempo real • Viernes 24 de Mayo, 2024</p>
+        </div>
+        
+        <!-- Estado del sistema conectado dinámicamente al backend -->
+        <div class="status-badge-container" [title]="isBackendConnected ? 'Backend conectado: ' + backendMessage : 'Sin conexión con el servidor backend'">
+          <div class="status-badge" [class.backend-ok]="isBackendConnected" [class.backend-err]="!isBackendConnected">
+            <span class="status-dot"></span>
+            <span class="status-text">{{ isBackendConnected ? 'SISTEMA ACTIVO' : 'SISTEMA INACTIVO' }}</span>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Fila de métricas clave (KPIs) -->
+      <section class="kpi-row">
+        <!-- Tarjeta Reservas Hoy -->
+        <div class="kpi-card total-reservas-card">
+          <div class="card-bg-graphic">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="bg-chart-icon"><path d="M3 3v18h18"></path><path d="m19 9-5 5-4-4-3 3"></path></svg>
+          </div>
+          <div class="kpi-header">
+            <h3>TOTAL RESERVAS HOY</h3>
+            <div class="kpi-icon-badge dark">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m19 9-5 5-4-4-3 3"></path><path d="M5 12V6h6"></path></svg>
+            </div>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-value-huge">42</span>
+            <span class="kpi-trend">+12% vs ayer</span>
+          </div>
+        </div>
+        
+        <!-- Tarjeta Canchas Ocupadas -->
+        <div class="kpi-card canchas-ocupadas-card">
+          <div class="kpi-header">
+            <h3>CANCHAS OCUPADAS</h3>
+            <div class="kpi-icon-badge light">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+          </div>
+          <div class="kpi-body">
+            <span class="kpi-value-huge">06<span class="value-denominator">/10</span></span>
+            <span class="kpi-subtext">Próxima disponibilidad: 16:30</span>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Tabla: Reservas del Día -->
+      <section class="table-card">
+        <div class="card-header table-card-header">
+          <h3>Reservas del Día</h3>
+          <div class="header-actions">
+            <button class="header-action-btn" title="Filtrar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+            </button>
+            <button class="header-action-btn" title="Exportar/Descargar">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table class="reservas-table">
+            <thead>
+              <tr>
+                <th>HORA</th>
+                <th>CANCHA</th>
+                <th>USUARIO (RUT)</th>
+                <th>ESTADO</th>
+                <th>CONTACTADO</th>
+                <th>ACCIÓN</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (reserva of reservasPaginadas; track $index) {
+                <tr class="table-row">
+                  <td class="hora-cell">{{ reserva.hora }}</td>
+                  <td class="cancha-cell" [style.border-left]="'4px solid ' + reserva.colorBorder">
+                    <div class="cancha-title">{{ reserva.cancha }}</div>
+                    <div class="cancha-subtext">{{ reserva.subtituloCancha }}</div>
+                  </td>
+                  <td class="user-cell">
+                    <div class="user-name">{{ reserva.usuario }}</div>
+                    <div class="user-rut">{{ reserva.rut }}</div>
+                  </td>
+                  <td>
+                    <span class="badge" [class.badge-abonado]="reserva.estado === 'ABONADO'" [class.badge-pendiente]="reserva.estado === 'PENDIENTE'">
+                      {{ reserva.estado }}
+                    </span>
+                  </td>
+                  <td class="contact-status-cell">
+                    @if (reserva.contactado) {
+                      <span class="contacted-yes">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        Sí
+                      </span>
+                    } @else {
+                      <span class="contacted-no">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+                        No
+                      </span>
+                    }
+                  </td>
+                  <td>
+                    <button class="btn-whatsapp-action" (click)="contactUser(reserva)">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                      Contactar
+                    </button>
+                  </td>
+                </tr>
+              }
+              
+              @if (reservasPaginadas.length === 0) {
+                <tr>
+                  <td colspan="6" class="no-records-cell">No se encontraron reservas con los filtros ingresados.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        
+        <div class="card-footer table-card-footer">
+          <span class="footer-count">Mostrando {{ reservasPaginadas.length }} de {{ reservasFiltradas.length }} reservas del día</span>
+          <div class="pagination">
+            <button class="page-btn" [class.active]="currentPage === 1" (click)="changePage(1)">1</button>
+            <button class="page-btn" [class.active]="currentPage === 2" (click)="changePage(2)">2</button>
+            <button class="page-btn" [class.active]="currentPage === 3" (click)="changePage(3)">3</button>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Fila inferior: Feed de actividad y Gráfico de barras -->
+      <section class="bottom-grid">
+        <!-- Actividad Reciente -->
+        <div class="kpi-card activity-card">
+          <div class="card-header borderless">
+            <h3>Actividad Reciente</h3>
+            <span class="badge badge-feed">LIVE FEED</span>
+          </div>
+          
+          <div class="activity-feed">
+            @for (act of actividades; track $index) {
+              <div class="activity-item">
+                <span class="activity-dot" [class]="'dot-' + act.tipo"></span>
+                <div class="activity-details">
+                  <p class="activity-title">
+                    <strong>{{ act.textoBold.split(' - ')[0] }}</strong> - {{ act.textoBold.split(' - ')[1] || act.textoNormal }}
+                  </p>
+                  <span class="activity-time">{{ act.tiempo }} • {{ act.responsable }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+        
+        <!-- Demanda por Turno -->
+        <div class="kpi-card chart-card">
+          <div class="card-header borderless">
+            <h3>Demanda por Turno</h3>
+          </div>
+          
+          <div class="chart-container">
+            <div class="bar-chart">
+              @for (item of demandaTurnos; track $index) {
+                <div class="chart-bar-col">
+                  <div class="bar-wrapper">
+                    <!-- Tooltip con valor -->
+                    <span class="bar-tooltip">{{ item.alturaPorcentaje }}%</span>
+                    <div class="bar-fill" [style.height.%]="item.alturaPorcentaje" [class.active]="item.esActivo"></div>
+                  </div>
+                </div>
+              }
+            </div>
+            
+            <div class="chart-labels">
+              <span class="chart-label">MAÑANA</span>
+              <span class="chart-label">MEDIODÍA</span>
+              <span class="chart-label">TARDE</span>
+              <span class="chart-label">NOCHE</span>
+            </div>
+            
+          </div>
+        </div>
+      </section>
+      
+      <!-- Botón de acción flotante (FAB) -->
+      <button class="floating-action-btn" (click)="addNewReservation()" title="Agregar nueva reserva">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+      </button>
+      
+    </main>
+
+    <!-- Viewport principal de contenido: Nóminas (activeMenu === 'nominas') -->
+    <main class="content-viewport nominas-viewport" *ngIf="activeMenu === 'nominas'">
+      
+      <!-- Fila de título de Nóminas -->
+      <section class="content-header">
+        <div class="header-titles">
+          <h2>GESTIÓN DE NÓMINAS</h2>
+          <p>Control operativo de programas de ramas deportivas.</p>
+        </div>
+        
+        <div style="display: flex; gap: 1rem; align-items: center;">
+          <!-- Mensaje de estado de backend offline si es necesario -->
+          <div *ngIf="ramasErrorMessage" class="status-badge backend-err" style="font-size: 0.72rem; padding: 0.4rem 0.8rem;" [title]="ramasErrorMessage">
+            <span class="status-dot"></span>
+            <span>DATOS LOCALES</span>
+          </div>
+
+          <button class="btn-export-report" (click)="exportRamasReport()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0.4rem;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Export Report
+          </button>
+        </div>
+      </section>
+
+      <!-- Tabla Principal: Active Sport Branches -->
+      <section class="table-card nominas-table-card">
+        <div class="card-header table-card-header">
+          <div style="display: flex; align-items: center; gap: 0.6rem;">
+            <!-- Icono de operaciones o rama -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-primary);"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            <h3 style="font-size: 1.15rem; font-weight: 800; color: #0f172a; margin: 0;">Active Sport Branches</h3>
+          </div>
+          <span class="badge badge-feed" style="font-weight: 800; font-size: 0.68rem; padding: 0.35rem 0.75rem;">LIVE OPERATIONS</span>
+        </div>
+
+        <div class="table-container">
+          <table class="nominas-table">
+            <thead>
+              <tr>
+                <th>BRANCH NAME</th>
+                <th>ASSIGNED DT</th>
+                <th>WEEKLY SCHEDULE</th>
+                <th>CAPACITY</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (rama of ramasDeportivas; track rama.id) {
+                <tr class="table-row">
+                  <!-- Rama Name and Icon -->
+                  <td class="rama-name-cell">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                      <div class="icon-circle" [style.background-color]="rama.colorFondoIcono">
+                        {{ rama.icono }}
+                      </div>
+                      <span class="rama-title-text">{{ rama.nombre }}</span>
+                    </div>
+                  </td>
+                  
+                  <!-- Assigned DT -->
+                  <td class="dt-cell">{{ rama.dtAsignado }}</td>
+                  
+                  <!-- Weekly Schedule -->
+                  <td class="schedule-cell">
+                    <div class="schedule-days">{{ rama.horario.split('\n')[0].trim() }}</div>
+                    <div class="schedule-hours" *ngIf="rama.horario.includes('\n')">{{ rama.horario.split('\n')[1].trim() }}</div>
+                  </td>
+                  
+                  <!-- Capacity / Slots progress bar -->
+                  <td class="capacity-cell">
+                    <div class="capacity-wrapper">
+                      <!-- Slots fill bar -->
+                      <div class="progress-bar-container">
+                        <!-- Red color if > 90% full, Orange otherwise -->
+                        <div class="progress-bar-fill" 
+                             [style.width.%]="(rama.slotsUsados / rama.slotsMax) * 100" 
+                             [class.almost-full]="(rama.slotsUsados / rama.slotsMax) >= 0.9">
+                        </div>
+                      </div>
+                      <!-- Raw details -->
+                      <span class="capacity-label" [class.almost-full-text]="(rama.slotsUsados / rama.slotsMax) >= 0.9">
+                        {{ rama.slotsUsados }}/{{ rama.slotsMax }} SLOTS
+                        <span class="almost-full-tag" *ngIf="(rama.slotsUsados / rama.slotsMax) >= 0.9"> (ALMOST FULL)</span>
+                      </span>
+                    </div>
+                  </td>
+                  
+                  <!-- Actions -->
+                  <td class="actions-cell">
+                    <div class="actions-wrapper">
+                      <button class="btn-action btn-edit" (click)="editRama(rama)" title="Editar DT">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path></svg>
+                      </button>
+                      <button class="btn-action btn-delete" (click)="deleteRama(rama)" title="Eliminar Rama">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+
+              @if (ramasDeportivas.length === 0 && !isLoadingRamas) {
+                <tr>
+                  <td colspan="5" class="no-records-cell">No se encontraron ramas deportivas cargadas.</td>
+                </tr>
+              }
+
+              @if (isLoadingRamas) {
+                <tr>
+                  <td colspan="5" class="no-records-cell">Cargando nóminas desde Deportes UCN...</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Viewport principal de contenido: En construcción (otros sub-menús) -->
+    <main class="content-viewport" *ngIf="activeMenu !== 'panel-principal' && activeMenu !== 'nominas'">
+      <section class="content-header">
+        <div class="header-titles">
+          <h2 style="text-transform: capitalize;">{{ activeMenu.replace('-', ' ') }}</h2>
+          <p>Sección Administrativa • Deportes UCN</p>
+        </div>
+        <button class="btn-whatsapp-support" (click)="setActiveMenu('panel-principal')">
+          ← Volver al Panel
+        </button>
+      </section>
+      
+      <div class="kpi-card" style="padding: 3.5rem; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 380px;">
+        <span style="font-size: 4rem; margin-bottom: 1.5rem;">🚧</span>
+        <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--color-primary); margin-bottom: 0.5rem;">Módulo de {{ activeMenu.replace('-', ' ') }} en Construcción</h3>
+        <p style="color: var(--text-muted); font-size: 1rem; max-width: 500px; margin-bottom: 1.5rem;">Esta sección administrativa está siendo conectada a las bases de datos de Deportes UCN. ¡Próximamente disponible!</p>
+        <button class="btn-new-reservation" style="max-width: 250px;" (click)="setActiveMenu('panel-principal')">Volver al Panel Principal</button>
+      </div>
+    </main>
+  </div>
+</div>
