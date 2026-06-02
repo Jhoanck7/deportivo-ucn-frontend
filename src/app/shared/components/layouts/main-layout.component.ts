@@ -12,6 +12,7 @@ import { NavbarComponent } from "../navbar/navbar.component";
       
         <!-- Aquí es donde Angular cargará dinámicamente el Home, Members, Activities, etc. -->
         <main class="main-content">
+        
             <router-outlet></router-outlet>
         </main>
         </div>
@@ -20,10 +21,14 @@ import { NavbarComponent } from "../navbar/navbar.component";
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      width: 100%;
+      overflow-x: hidden;
     }
     .main-content {
       flex: 1;
       width: 100%; 
+      padding: top: 70px;
+      box-sizing: border-box;
     }`,
 })
 

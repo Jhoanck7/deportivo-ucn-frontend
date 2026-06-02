@@ -1,7 +1,9 @@
-import { ChangeDetectionStrategy, Component, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject, signal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { RouterLink, RouterOutlet } from "@angular/router";
 import { HomeFeature } from "./home-feature.model";
+import { AuthService } from "../../../../core/services/auth.service";
+
 
 @Component({
     selector: 'app-home-page',
@@ -13,9 +15,15 @@ import { HomeFeature } from "./home-feature.model";
 })
 export class HomePageComponent {
 
-    heroTitle = signal<string>('Bienvenido a Deportivo UCN');
-    heroSubtitle = signal<string>('Gestiona todas tus actividades deportivas con la mejor tecnología y organiza tu equipo de manera eficiente.');
+    heroTitle = signal<string>('Centro deportivo UCN');
+    heroSubtitle = signal<string>('Accede a nuestras instalaciones deportivas y gestiona tus reservas de manera eficiente.');
     
+    //auth logic 
+    private authService =  inject(AuthService);
+    isAuthenticated = this.authService.isAuthenticated;
+    currentUser = this.authService.currentUser;
+
+
     features = signal<HomeFeature[]>([
         {
             title: 'Gestión de Equipos',

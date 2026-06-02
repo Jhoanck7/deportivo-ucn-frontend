@@ -19,8 +19,12 @@
     } @else {
       <!-- Selectores de prueba rápida para que verifiques cómo cambia el Navbar en vivo -->
       <div class="demo-login-buttons">
-        <button (click)="changeRole('admin')">Simular Admin</button>
-        <button (click)="changeRole('user')">Simular Miembro</button>
+         @if (!isAuthenticated()) {
+        <button routerLink="/auth/login" class="btn btn-primary">Iniciar Sesión</button>
+        <button routerLink="/auth/register" class="btn">Registrarse</button>
+        }
+        <button (click)="changeRole('admin')"class="btn">Simular Admin</button>
+        <button (click)="changeRole('user')" class="btn">Simular Miembro</button>
       </div>
     }
   </div>

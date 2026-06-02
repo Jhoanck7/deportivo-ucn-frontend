@@ -16,8 +16,7 @@ export class NavbarComponent {
 
     private menuConfig: NavItem[] = [
     {label: 'Inicio', routerLink: '/home'},
-    {label: 'Iniciar Seción', routerLink: '/login'},
-    //todo: to do these routes
+        //todo: to do these routes
     {label: 'Reservar cancha',routerLink: '/rent'},
     {label: 'Nosotros', routerLink: '/about'}
     ]
