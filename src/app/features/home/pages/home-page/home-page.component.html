@@ -4,17 +4,23 @@
     <div class="hero-content">
       <h1>{{ heroTitle() }}</h1>
       <p>{{ heroSubtitle() }}</p>
-      <img ><img>
       <div class="hero-actions">
-        <!--button routerLink="/login" class="btn btn-primary">Iniciar Sesión</!--button-->
-        <!--button routerLink="/register" class="btn btn-secondary">Registrarse</!--button-->
+        @if (!isAuthenticated()) {
+        <button class="btn btn-primary">Ver Ramas Deportivas</button>
+        <button class="btn btn-secondary">Arrendar Cancha</button>
+        } @else if (currentUser()?.role === 'admin') {
+          <button routerLink= "/dashboard/admin" class="btn btn-primary">Panel Principal</button>
+        }
+        @else {
+          <button class="btn btn-secondary">Arrendar Cancha</button>
+        }
       </div>
     </div>
   </section>
 
   <!-- Sección de Características -->
   <section class="features-section">
-    <h2>Nuestros Servicios</h2>
+    <h2>Ramas Deportivas</h2>
     
     <div class="features-grid">
       @for (feature of features(); track feature.title) {
