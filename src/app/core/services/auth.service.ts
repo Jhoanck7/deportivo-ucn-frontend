@@ -16,6 +16,8 @@ export class AuthService {
 
     currentUser = this.currentUserSignal.asReadonly()
 
+    currentUsername = computed(() => this.currentUserSignal()?.username ?? null)
+
     currentUserRole = computed(() => this.currentUserSignal()?.role ?? null)
     
     isAuthenticated = computed(() => this.currentUserSignal() !== null)

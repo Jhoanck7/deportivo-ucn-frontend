@@ -18,7 +18,8 @@ export class NavbarComponent {
     {label: 'Inicio', routerLink: '/home'},
         //todo: to do these routes
     {label: 'Reservar cancha',routerLink: '/rent'},
-    {label: 'Nosotros', routerLink: '/about'}
+    {label: 'Nosotros', routerLink: '/about'},
+    {label: 'Diseño del sistema', routerLink: '/design-system'}
     ]
     items = this.menuConfig;
 

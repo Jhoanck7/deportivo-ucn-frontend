@@ -7,9 +7,10 @@ import { NavbarComponent } from "../navbar/navbar.component";
     standalone: true,
     imports: [RouterOutlet, NavbarComponent],
     template: `
+        
         <div class="app-container">
         <app-navbar></app-navbar>
-      
+        
         <!-- Aquí es donde Angular cargará dinámicamente el Home, Members, Activities, etc. -->
         <main class="main-content">
         
@@ -27,7 +28,7 @@ import { NavbarComponent } from "../navbar/navbar.component";
     .main-content {
       flex: 1;
       width: 100%; 
-      padding: top: 70px;
+      padding-top: 70px;
       box-sizing: border-box;
     }`,
 })

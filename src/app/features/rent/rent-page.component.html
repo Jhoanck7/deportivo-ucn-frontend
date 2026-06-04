@@ -1,0 +1,79 @@
+<div class="page-container animate-fade-in">
+  
+  <header class="content-header">
+    <div class="header-titles">
+      <h2 class="rent-main-title">Arriendo de Canchas</h2>
+      <p class="rent-subtitle">Reserva tu bloque horario y disfruta del deporte en el Club UCN.</p>
+    </div>
+  </header>
+
+  @if (showAuthWarning()) {
+    <div class="alert-box alert-box-danger animate-slide-up">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      <span>¡Acceso Restringido! Necesitas una cuenta de socio activa. Redirigiéndote al módulo de autenticación...</span>
+    </div>
+  }
+
+  <div class="flex-between filter-bar">
+    <div class="time-tabs">
+      <button [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">Todas las Canchas</button>
+      <button [class.active]="activeFilter() === 'futbol'" (click)="setFilter('futbol')">Fútbol</button>
+      <button [class.active]="activeFilter() === 'tenis'" (click)="setFilter('tenis')">Tenis</button>
+    </div>
+    
+    @if (!isAuthenticated()) {
+      <span class="visitor-indicator-tag">
+        Inicia sesión para reservar
+      </span>
+    }
+  </div>
+
+  <div class="grid-responsive">
+    @for (court of courts(); track court.id) {
+      @if (activeFilter() === 'all' || (activeFilter() === 'futbol' && court.id === 1) || (activeFilter() === 'tenis' && court.id === 2)) {
+        
+        <div class="feature-card court-rent-card animate-slide-up slot-tile">
+          
+          <div class="court-card-header">
+            <div class="court-info-group">
+              <span class="court-icon-wrapper">
+                {{ court.icon }}
+              </span>
+              <div class="court-title-block">
+                <h3 class="court-name-title">{{ court.name }}</h3>
+                <p class="court-type-desc">{{ court.type }}</p>
+              </div>
+            </div>
+            
+            <div class="court-price-block">
+              <span class="court-price-value">{{ court.price }}</span>
+              <span class="court-price-label">Por Hora</span>
+            </div>
+          </div>
+
+          <p class="slots-heading-title">Bloques Horarios Disponibles:</p>
+
+          <div class="slots-layout-grid">
+            @for (slot of court.slots; track slot.time) {
+              <button 
+                type="button" 
+                class="slot-tile"
+                [class.slot-booked]="!slot.available"
+                (click)="slot.available && selectSlot(court.name, slot.time)"
+                [disabled]="!slot.available"
+              >
+                <span class="slot-time-text">{{ slot.time }}</span>
+                <span class="slot-status-indicator">
+                  {{ slot.available ? 'Disponible' : 'Ocupado' }}
+                </span>
+              </button>
+            }
+          </div>
+
+        </div>
+
+      }
+    }
+  </div>
+
+</div>

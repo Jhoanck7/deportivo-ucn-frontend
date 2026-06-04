@@ -7,12 +7,12 @@
       <div class="hero-actions">
         @if (!isAuthenticated()) {
         <button class="btn btn-primary">Ver Ramas Deportivas</button>
-        <button class="btn btn-secondary">Arrendar Cancha</button>
+        <button  routerLink= "/rent" class="btn btn-secondary">Arrendar Cancha</button>
         } @else if (currentUser()?.role === 'admin') {
-          <button routerLink= "/dashboard/admin" class="btn btn-primary">Panel Principal</button>
+          <button routerLink= "/dashboard-admin" class="btn btn-primary">Panel Principal</button>
         }
         @else {
-          <button routerLink= "/dashboard/user" class="btn btn-secondary">Arrendar Cancha</button>
+          <button routerLink= "/rent" class="btn btn-secondary">Arrendar Cancha</button>
         }
       </div>
     </div>
@@ -20,7 +20,7 @@
 
   <!-- Sección de Características -->
   <section class="features-section">
-    <h2>Ramas Deportivas</h2>
+    <h2 class="section-title">Ramas Deportivas</h2>
     
     <div class="features-grid">
       @for (feature of features(); track feature.title) {

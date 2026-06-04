@@ -15,7 +15,7 @@
   <div class="navbar-actions">
     @if (isAuthenticated()) {
       <span class="user-badge">{{ currentUser()?.username }} ({{ currentUser()?.role }})</span>
-      <button (click)="logout()" class="btn-logout">Salir</button>
+      <button (click)="logout()" class="btn btn-primary">Salir</button>
     } @else {
       <!-- Selectores de prueba rápida para que verifiques cómo cambia el Navbar en vivo -->
       <div class="demo-login-buttons">

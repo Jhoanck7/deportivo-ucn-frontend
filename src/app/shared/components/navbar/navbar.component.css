@@ -48,29 +48,6 @@
     align-items: center;
     gap: 1rem;
 }   
-.user-badge {
-    background-color: #334155;
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    cursor: pointer;
-    font-size: 0.8rem;
+
     
-}
-.demo-login-buttons {
-  display: flex;
-  gap: 1rem;
 
-}
-
-.demo-login-buttons button:hover {
-  background-color: #0369a1;
-}
-
-.btn-logout {
-  background-color: #ef4444;
-  color: white;
-  border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  cursor: pointer;
-}
