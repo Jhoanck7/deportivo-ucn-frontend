@@ -1,56 +1,48 @@
 import { Routes } from '@angular/router';
-import { AuthService } from './core/services/auth.service';
-import { inject } from '@angular/core';
-import { DashboardLayoutComponent  } from './shared/components/layouts/dashboard-layout/dashboard-layout.component';
-
+import { AdminLayoutComponent } from './features/dashboard/admin/dashboard-layout/admin-layout.component';
 import { MainLayoutComponent } from './shared/components/layouts/main-layout.component';
 import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
-  {path: '',
+  {
+    path: '',
     component: MainLayoutComponent,
     children: [
       { path: '', redirectTo: 'home', pathMatch: 'full' },
-      { path: 'home', 
-        loadComponent: () => import('./features/home/pages/home-page/home-page.component')
-        .then(m => m.HomePageComponent)},
       {
-        path: 'rent', 
-        loadComponent: () => import('./features/rent/rent-page.component').then(m => m.RentPageComponent)
+        path: 'home',
+        loadChildren: () => import('./features/home/home.routes').then((m) => m.HOME_ROUTES),
+      },
+      {
+        path: 'rent',
+        loadChildren: () =>
+          import('./features/bookings/bookings.routes').then((m) => m.BOOKINGS_ROUTES),
       },
       {
         path: 'design-system',
-        loadComponent: () => import('./features/design-system/design-system-page.component').then(m => m.DesignSystemPageComponent)
-      }
-    ]
+        loadComponent: () =>
+          import('./features/design-system/design-system-page.component').then(
+            (m) => m.DesignSystemPageComponent,
+          ),
+      },
+    ],
   },
-  { path: 'auth',
-    children: [
-      { path: 'login',
-        loadComponent: () => import('./features/auth/components/login/login-page.component')
-        .then(m => m.LoginPageComponent)
-      }]
+  {
+    path: 'auth',
+    loadChildren: () => import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
   {
     path: 'dashboard-admin',
-    component: DashboardLayoutComponent,
-    canActivate: [authGuard],
-    canMatch: [() => inject(AuthService).currentUserRole() === 'admin'],
+    component: AdminLayoutComponent,
+    canActivate: [authGuard, adminGuard],
     children: [
       {
         path: '',
-        loadComponent: () => import('./features/dashboard/admin/components/admin-dashboard.component')
-        .then(m => m.AdminDashboardComponent)    
-      },
-      {
-        path: 'roster',
-        loadComponent: () => import('./features/dashboard/admin/pages/roster-page.component').then(m => m.RosterPageComponent)
+        loadChildren: () =>
+          import('./features/dashboard/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
       }
     ]
-  }
-
-  ,
+  },
   { path: '**', redirectTo: '' }
-  ]
-
-
+];

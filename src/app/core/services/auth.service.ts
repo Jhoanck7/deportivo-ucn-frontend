@@ -1,10 +1,6 @@
 import { Injectable, signal, computed } from "@angular/core";
-
-export interface UserSession {
-    username: string;
-    role: 'admin'| 'user';
-    token: string;
-}
+import { AuthSession } from '../models/auth-session.model';
+import { TokenStorageService } from './token-storage.service';
 
 @Injectable({
     providedIn: 'root'
@@ -12,25 +8,49 @@ export interface UserSession {
 })
 
 export class AuthService {
-    private currentUserSignal = signal<UserSession | null>(null)
+    private readonly session = signal<AuthSession | null>(null)
 
-    currentUser = this.currentUserSignal.asReadonly()
+    readonly currentUser = this.session.asReadonly()
 
-    currentUsername = computed(() => this.currentUserSignal()?.username ?? null)
-
-    currentUserRole = computed(() => this.currentUserSignal()?.role ?? null)
+    readonly currentUserRole = computed(() => this.session()?.role ?? null)
     
-    isAuthenticated = computed(() => this.currentUserSignal() !== null)
+    readonly isAuthenticated = computed(() => this.session() !== null)
 
-    loginAs(role: 'admin' | 'user') {
-        this.currentUserSignal.set({
-            username: `Test ${role}`,
-            role: role,
-            token: 'fake-jwt-token'
-        });
+    constructor(private tokenStorage: TokenStorageService) {
+        const token = this.tokenStorage.getToken();
+        const userStr = localStorage.getItem('deportivo_ucn_user');
+        if (token && userStr) {
+            try {
+                const user = JSON.parse(userStr);
+                this.session.set({
+                    token,
+                    ...user
+                });
+            } catch (e) {
+                this.logout();
+            }
+        }
     }
 
-    logout() {
-        this.currentUserSignal.set(null);
+    setSession(session: AuthSession): void {
+        this.session.set(session);
+        this.tokenStorage.setToken(session.token);
+        localStorage.setItem(
+            'deportivo_ucn_user',
+            JSON.stringify({
+                email: session.email,
+                firstName: session.firstName,
+                lastName: session.lastName,
+                role: session.role,
+            })
+        );
     }
+
+    logout(): void {
+        this.session.set(null);
+        this.tokenStorage.clear();
+        localStorage.removeItem('deportivo_ucn_user');
+    }
+
+    
 }
