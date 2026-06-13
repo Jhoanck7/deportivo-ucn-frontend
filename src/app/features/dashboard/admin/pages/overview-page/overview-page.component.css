@@ -1,0 +1,10 @@
+/* Overview-specific overrides; shell styles live in _dashboard-shell.css */
+.overview-search {
+  width: 280px;
+}
+
+.page-container {
+  position: relative;
+  padding: 0;
+  gap: 1.5rem;
+}

@@ -1,0 +1,5 @@
+/* Register-specific overrides; split layout styles live in shared/_auth-layout.css */
+input.invalid {
+  border-color: var(--color-danger) !important;
+  background-color: var(--color-danger-light) !important;
+}

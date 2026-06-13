@@ -1,0 +1,109 @@
+<div class="page-container animate-fade-in">
+  
+  <header class="content-header">
+    <div class="header-titles">
+      <h2 class="rent-main-title">Arriendo de Canchas</h2>
+      <p class="rent-subtitle">Reserva tu bloque horario y disfruta del deporte en el Club UCN.</p>
+    </div>
+  </header>
+
+  @if (showAuthWarning()) {
+    <div class="alert-box alert-box-danger animate-slide-up" style="margin-bottom: 1rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      <span>¡Acceso Restringido! Necesitas una cuenta de socio activa. Redirigiéndote al módulo de autenticación...</span>
+    </div>
+  }
+
+  @if (bookingSuccess()) {
+    <div class="alert-box animate-slide-up" style="background-color: #ecfdf5; border: 1px solid rgba(16, 185, 129, 0.2); color: #065f46; margin-bottom: 1rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      <span>{{ bookingSuccess() }}</span>
+    </div>
+  }
+
+  @if (bookingError()) {
+    <div class="alert-box alert-box-danger animate-slide-up" style="margin-bottom: 1rem;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+      <span>{{ bookingError() }}</span>
+    </div>
+  }
+
+  <div class="flex-between filter-bar" style="flex-wrap: wrap; gap: 1rem;">
+    <div class="time-tabs">
+      <button [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">Todas las Canchas</button>
+      <button [class.active]="activeFilter() === 'futbol'" (click)="setFilter('futbol')">Fútbol</button>
+      <button [class.active]="activeFilter() === 'tenis'" (click)="setFilter('tenis')">Tenis</button>
+    </div>
+
+    <div class="date-picker-wrapper" style="display: flex; align-items: center; gap: 0.75rem;">
+      <label for="booking-date" style="font-weight: 700; font-size: 0.9rem; color: var(--text-main);">Fecha:</label>
+      <input 
+        type="date" 
+        id="booking-date" 
+        [ngModel]="selectedDate()" 
+        (ngModelChange)="onDateChange($event)" 
+        style="padding: 0.5rem 1rem; border-radius: 50px; border: 1.5px solid #cbd5e1; font-weight: 600; outline: none; font-family: inherit; font-size: 0.9rem; color: var(--text-main); background-color: var(--color-card);"
+      />
+    </div>
+    
+    @if (!isAuthenticated()) {
+      <span class="visitor-indicator-tag">
+        Inicia sesión para reservar
+      </span>
+    }
+  </div>
+
+  <div class="grid-responsive">
+    @for (court of courts(); track court.id) {
+      @if (activeFilter() === 'all' || (activeFilter() === 'futbol' && court.isFutbol) || (activeFilter() === 'tenis' && court.isTenis)) {
+        
+        <div class="feature-card court-rent-card animate-slide-up" style="display: flex; flex-direction: column; padding: 1.5rem; border-radius: var(--border-radius-xl); background-color: var(--color-card); border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: var(--shadow-card); transition: var(--transition-smooth); position: relative; overflow: hidden; align-items: stretch; text-align: left;">
+          
+          <!-- Image Header -->
+          <div class="court-image-wrapper" style="width: calc(100% + 3rem); height: 160px; margin: -1.5rem -1.5rem 1.25rem -1.5rem; overflow: hidden; position: relative;">
+            <img [src]="getImageUrl(court.name)" [alt]="court.name" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" />
+            <div style="position: absolute; bottom: 0.75rem; left: 0.75rem; background-color: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); color: white; padding: 0.35rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.15);">
+              {{ court.type }}
+            </div>
+          </div>
+
+          <div class="court-card-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem;">
+            <h3 class="court-name-title" style="margin: 0; color: var(--color-primary); font-weight: 800; font-size: 1.2rem;">{{ court.name }}</h3>
+            
+            <div class="court-price-block" style="text-align: right;">
+              <span class="court-price-value" style="font-size: 1.3rem; font-weight: 850; color: var(--color-accent); display: flex; align-items: center; gap: 0.5rem;">{{ court.price }}</span>
+              <span class="court-price-label" style="font-size: 0.7rem; font-weight: 700; color: var(--text-light); text-transform: uppercase;">Por Hora</span>
+            </div>
+          </div>
+
+          <p class="slots-heading-title">Bloques Horarios Disponibles:</p>
+
+          <div class="slots-layout-grid">
+            @for (slot of court.slots; track slot.time) {
+              <button 
+                type="button" 
+                class="slot-tile"
+                [class.slot-booked]="!slot.available"
+                (click)="slot.available && selectSlot(court, slot)"
+                [disabled]="!slot.available || bookingLoading()"
+              >
+                <span class="slot-time-text">{{ slot.time }}</span>
+                <span class="slot-status-indicator">
+                  {{ slot.available ? 'Disponible' : 'Ocupado' }}
+                </span>
+              </button>
+            }
+          </div>
+
+        </div>
+
+      }
+    }
+    @if (courts().length === 0) {
+      <div class="feature-card" style="grid-column: 1 / -1; text-align: center; padding: 3rem;">
+        <p style="color: var(--text-muted); font-size: 1.1rem; font-weight: 600;">No hay canchas disponibles en el sistema.</p>
+      </div>
+    }
+  </div>
+
+</div>

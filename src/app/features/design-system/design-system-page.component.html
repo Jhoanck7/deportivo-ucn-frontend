@@ -1,0 +1,179 @@
+<div class="design-system-container">
+  
+  <header class="ds-header">
+    <h1>🎨 Sistema de Diseño — Club Deportes UCN</h1>
+    <p>Catálogo maestro interactivo de componentes atómicos, clases utilitarias y dinámicas de animación.</p>
+  </header>
+
+  <hr class="ds-divider">
+
+  <section class="ds-section">
+    <h2>1. Identidad Visual y Tipografía</h2>
+    <p class="ds-section-desc">Tokens de color HSL y variables de texto basadas en la fuente <code>Plus Jakarta Sans</code>.</p>
+    
+    <div class="ds-demo-box">
+      <div class="color-palette-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+        <div style="background: var(--color-primary); color: white; padding: 1rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem;">Primary Navy<br>#070e27</div>
+        <div style="background: var(--color-primary-light); color: white; padding: 1rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem;">UCN Blue<br>#1e3a8a</div>
+        <div style="background: var(--color-accent); color: white; padding: 1rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem;">Sport Coral<br>#e2583e</div>
+        <div style="background: var(--color-card); color: var(--text-main); padding: 1rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; border: 1px solid #e2e8f0;">Card White<br>#ffffff</div>
+      </div>
+      
+      <h1 style="font-size: 2.2rem; font-weight: 850; color: var(--color-primary); margin-bottom: 0.5rem;">Heading 1 (2.2rem - Grosor 850)</h1>
+      <h2 style="font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin-bottom: 0.5rem;">Heading 2 (1.5rem - Grosor 800)</h2>
+      <p style="font-size: 0.95rem; font-weight: 500; color: var(--text-muted);">Cuerpo de texto común para descripciones operativas de tablas y portales.</p>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <h2>2. Botones de Acción (<code>.btn</code>)</h2>
+    <p class="ds-section-desc">Clases de utilidad para inyectar botones interactivos con bordes curvados y transiciones de aceleración.</p>
+
+    <div class="ds-component-grid">
+      <div class="ds-card">
+        <h3>Primario Corporativo</h3>
+        <div class="ds-preview"><button class="btn btn-primary">Inscribir Socio</button></div>
+        <pre><code>{{ codeBtnPrimary }}</code></pre>
+      </div>
+
+      <div class="ds-card">
+        <h3>Secundario / Outline</h3>
+        <div class="ds-preview"><button class="btn btn-secondary">Volver Atrás</button></div>
+        <pre><code>{{ codeBtnSecondary }}</code></pre>
+      </div>
+
+      <div class="ds-card">
+        <h3>Acento Destacados</h3>
+        <div class="ds-preview"><button class="btn btn-accent">🔥 Ofertas Hoy</button></div>
+        <pre><code>{{ codeBtnAccent }}</code></pre>
+      </div>
+
+      <div class="ds-card">
+        <h3>Canal de Soporte</h3>
+        <div class="ds-preview"><button class="btn btn-whatsapp">WhatsApp Soporte</button></div>
+        <pre><code>{{ codeBtnWhatsapp }}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <h2>3. Inputs y validaciones (<code>.form-group</code>)</h2>
+    <p class="ds-section-desc">Estructuras de formulario encapsuladas listas para capturar datos en C# o Angular.</p>
+
+    <div class="ds-demo-box layout-flex" style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 280px;">
+        <div class="form-group">
+          <label for="ds-input-demo">RUT del Socio</label>
+          <input type="text" id="ds-input-demo" placeholder="12.345.678-9">
+        </div>
+        <div class="form-group" style="margin-top: 1rem;">
+          <label>Estado Control (Error / Touch)</label>
+          <input type="text" class="invalid" value="Entrada inválida o RUT mal tipeado">
+        </div>
+      </div>
+      <div style="flex: 1.2; min-width: 320px;">
+        <pre><code>{{ codeFormGroup }}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <h2>4. Etiquetas de Estado (<code>.badge</code>)</h2>
+    <p class="ds-section-desc">Utilizadas para indicar de forma sutil el estado de pagos o reservas en las grillas de datos.</p>
+
+    <div class="ds-demo-box layout-flex" style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+      <div style="display: flex; gap: 0.75rem; flex: 1; min-width: 250px; justify-content: center;">
+        <span class="badge badge-abonado">ABONADO</span>
+        <span class="badge badge-pendiente">PENDIENTE</span>
+        <span class="badge badge-warning">REVISIÓN</span>
+      </div>
+      <div style="flex: 1.5; min-width: 320px;">
+        <pre><code>{{ codeBadges }}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <h2>5. Contenedores Complejos y Estructuras de Datos</h2>
+    <p class="ds-section-desc">Estructuras mayores para maquetar el panel del Administrador y el Portal del Socio de forma uniforme.</p>
+
+    <div class="ds-demo-box" style="margin-bottom: 2rem;">
+      <div class="feature-card" style="padding: 1.25rem;">
+        <div class="custom-table-container">
+          <table class="custom-table">
+            <thead>
+              <tr><th>HORA</th><th>CANCHA DEPORTIVA</th><th>ESTADO DE PAGO</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight: 800;">18:00</td>
+                <td>Pádel Court 1 — UCN</td>
+                <td><span class="badge badge-abonado">ABONADO</span></td>
+              </tr>
+              <tr>
+                <td style="font-weight: 800;">19:30</td>
+                <td>Cancha Central de Fútbol</td>
+                <td><span class="badge badge-pendiente">PENDIENTE</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="ds-component-grid">
+      <div class="ds-card">
+        <h3>Tarjeta Base Elevada (<code>.feature-card</code>)</h3>
+        <pre><code>{{ codeFeatureCard }}</code></pre>
+      </div>
+
+      <div class="ds-card">
+        <h3>Tabla Corporativa (<code>.custom-table</code>)</h3>
+        <pre><code>{{ codeCustomTable }}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="ds-section">
+    <h2>6. Sistema de Animaciones y Micro-interacciones (Cinema FX)</h2>
+    <p class="ds-section-desc">Clases aceleradas por GPU configuradas en el núcleo para dar fluidez nativa a las transiciones de rutas y modales.</p>
+
+    <div class="ds-component-grid">
+      <div class="ds-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Desvanecimiento (<code>.animate-fade-in</code>)</h3>
+          <button class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" (click)="replayFade()">▶ Replay</button>
+        </div>
+        <div class="ds-preview" style="min-height: 110px; background-color: #070e27; color: white;">
+          @if (triggerFade()) {
+            <span class="animate-fade-in" style="font-weight: 700; color: #38bdf8;">⚡ Transición Fluida</span>
+          }
+        </div>
+        <pre><code>{{ codeAnimFadeIn }}</code></pre>
+      </div>
+
+      <div class="ds-card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h3>Desplazamiento Vertical (<code>.animate-slide-up</code>)</h3>
+          <button class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.75rem;" (click)="replaySlide()">▶ Replay</button>
+        </div>
+        <div class="ds-preview" style="min-height: 110px; background-color: #f8fafc;">
+          @if (triggerSlide()) {
+            <div class="animate-slide-up" style="background: white; border: 1px solid #e2e8f0; padding: 0.5rem 1rem; border-radius: 8px; box-shadow: var(--shadow-sm); font-weight: 700; color: var(--color-accent);">
+              🚀 Tarjeta Entrante
+            </div>
+          }
+        </div>
+        <pre><code>{{ codeAnimSlideUp }}</code></pre>
+      </div>
+    </div>
+
+    <div class="ds-card" style="margin-top: 1.5rem; background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%); border-color: #bfdbfe;">
+      <h3 style="color: var(--color-primary-light); font-weight: 800;">💡 Dinámicas de Hover Compartidas (<code>var(--transition-smooth)</code>)</h3>
+      <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5; margin-top: 0.25rem;">
+        Todos los botones (<code>.btn</code>), las tarjetas (<code>.feature-card</code>), los inputs y los bloques horarios del panel de arriendos (<code>.slot-tile</code>) tienen inyectada de forma nativa la variable de transición. Esto significa que los cambios de color, elevación de sombras y escalado de tamaño responden bajo una curva Bézier cúbica sincronizada (<code>all 0.25s cubic-bezier(0.4, 0, 0.2, 1)</code>), evitando parpadeos bruscos en el monitor.
+      </p>
+    </div>
+  </section>
+
+</div>

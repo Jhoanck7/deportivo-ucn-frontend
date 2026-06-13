@@ -1,0 +1,16 @@
+/* Login page — layout-specific only; tokens and .form-group from styles.css */
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  margin-top: 0.5rem;
+  padding: 0.9rem 1.3rem;
+}
+
+.auth-google-btn {
+  width: 100%;
+}
