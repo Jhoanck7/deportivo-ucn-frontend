@@ -2,8 +2,12 @@
   <!-- Sección Hero -->
   <section class="hero-section">
     <div class="hero-content">
+      <!-- Logo Oficial Flotante -->
+      <img src="/logo.jpg" alt="Logo Deportivo UCN" style="height: 100px; width: 100px; border-radius: 12px; object-fit: cover; border: 3px solid white; box-shadow: 0 10px 25px rgba(0,0,0,0.3); margin-bottom: 1.5rem; animation: pulseLogo 3s infinite ease-in-out;" />
+      
       <h1>{{ heroTitle() }}</h1>
       <p>{{ heroSubtitle() }}</p>
+      
       <div class="hero-actions">
         <button class="btn btn-primary" (click)="scrollToBranches()">Ver Ramas Deportivas</button>
         @if (!isAuthenticated()) {
@@ -17,9 +21,10 @@
     </div>
   </section>
 
-  <!-- Sección de Características -->
+  <!-- Sección de Ramas Deportivas -->
   <section class="features-section">
-    <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">Nuestras Ramas Deportivas</h2>
+    <h2 class="section-title">Nuestras Ramas Deportivas</h2>
+    <p class="section-subtitle-text">Conoce nuestras disciplinas, horarios y postula oficiales para entrenar en el club</p>
     
     <div class="features-grid">
       @for (branch of branches(); track branch.id) {
@@ -28,7 +33,7 @@
           <!-- Image Header -->
           <div class="branch-image-wrapper" style="width: calc(100% + 3rem); height: 160px; margin: -1.5rem -1.5rem 1.25rem -1.5rem; overflow: hidden; position: relative;">
             <img [src]="getImageUrl(branch.name)" [alt]="branch.name" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease;" />
-            <div style="position: absolute; bottom: 0.75rem; left: 0.75rem; background-color: rgba(15, 23, 42, 0.75); backdrop-filter: blur(4px); color: white; padding: 0.35rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.15);">
+            <div class="sector-badge">
               {{ branch.trainingSector }}
             </div>
           </div>
@@ -46,12 +51,73 @@
             </div>
             <div style="display: flex; align-items: center; gap: 0.4rem;">
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--text-muted);"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
-              <span>Límite: {{ branch.athleteLimit }} seleccionados</span>
+              <span>Límite: <strong>{{ branch.athleteLimit }}</strong> deportistas</span>
             </div>
           </div>
         </article>
       } @empty {
-        <p style="color: var(--text-muted); font-weight: 600;">Cargando ramas deportivas...</p>
+        <p style="color: var(--text-muted); font-weight: 600; text-align: center; width: 100%;">No hay ramas deportivas registradas en este momento.</p>
+      }
+    </div>
+  </section>
+
+  <!-- Sección de Arriendo de Canchas (Promo con Link) -->
+  <section class="rent-promo-section">
+    <div class="promo-container">
+      <div class="promo-image-side">
+        <img src="https://images.unsplash.com/photo-1545809074-59472b3f5eca?auto=format&fit=crop&w=800&q=80" alt="Arriendo de Canchas UCN" />
+        <div class="promo-badge">¡3 Canchas Disponibles!</div>
+      </div>
+      <div class="promo-content-side">
+        <span class="promo-tagline">Reserva de Infraestructura</span>
+        <h2>Arrienda tu Cancha</h2>
+        <p>Disponemos de canchas de pasto sintético para fútbol/futbolito, gimnasio techado principal multiuso de básquetbol/vóleibol y sala multiuso para tenis de mesa y baile. Reserva tu bloque de lunes a viernes y disfruta del deporte.</p>
+        
+        <ul class="promo-features">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Bloques fijos de 1 Hora
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Abono inicial para asegurar tu reserva
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            Confirmación automatizada y contacto rápido
+          </li>
+        </ul>
+
+        <button routerLink="/rent" class="btn btn-primary btn-rent-now">
+          Reservar Cancha Online
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left: 0.25rem;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sección de Noticias -->
+  <section class="news-section">
+    <span class="section-tag">Novedades Club</span>
+    <h2 class="section-title">Noticias y Eventos Recientes</h2>
+    <p class="section-subtitle-text" style="margin-bottom: 1.5rem;">Sigue de cerca las actividades y logros de nuestras ramas competitivas</p>
+    
+    <div class="news-grid">
+      @for (news of newsList(); track news.id) {
+        <article class="news-card">
+          <div class="news-image-wrapper">
+            <img [src]="news.imageUrl" [alt]="news.title" />
+            <span class="news-tag">{{ news.category }}</span>
+          </div>
+          <div class="news-body">
+            <span class="news-date">{{ formatDate(news.date) }}</span>
+            <h3>{{ news.title }}</h3>
+            <p>{{ news.content }}</p>
+            <a class="news-link">Leer más &rarr;</a>
+          </div>
+        </article>
+      } @empty {
+        <p style="color: var(--text-muted); font-weight: 600; text-align: center; width: 100%;">No hay noticias publicadas en este momento.</p>
       }
     </div>
   </section>
