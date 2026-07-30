@@ -1,7 +1,7 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -39,6 +39,7 @@ export class RentPageComponent implements OnInit {
   private courtsService = inject(CourtsService);
   private bookingsService = inject(BookingsService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
 
   isAuthenticated = this.authService.isAuthenticated;
   activeFilter = signal<'all' | 'futbol' | 'tenis'>('all');
@@ -52,6 +53,7 @@ export class RentPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+    this.checkPaymentCallback();
   }
 
   loadData(): void {
@@ -134,6 +136,33 @@ export class RentPageComponent implements OnInit {
     this.activeFilter.set(sport);
   }
 
+  checkPaymentCallback(): void {
+    this.route.queryParams.subscribe(params => {
+      const payment = params['payment'];
+      const bookingId = params['bookingId'];
+      
+      if (payment === 'success' && bookingId) {
+        this.bookingSuccess.set(`¡Pago aprobado por Webpay Plus con éxito! Tu arriendo de cancha #${bookingId} ha sido confirmado.`);
+        this.loadData(); // Refresh list to show newly booked slots
+        
+        // Clean URL parameters
+        this.router.navigate([], {
+          queryParams: { payment: null, bookingId: null, token_ws: null },
+          queryParamsHandling: 'merge'
+        });
+        
+        setTimeout(() => this.bookingSuccess.set(null), 8000);
+      } else if (payment === 'cancel') {
+        this.bookingError.set('La transacción de pago Webpay fue cancelada.');
+        this.router.navigate([], {
+          queryParams: { payment: null, bookingId: null },
+          queryParamsHandling: 'merge'
+        });
+        setTimeout(() => this.bookingError.set(null), 6000);
+      }
+    });
+  }
+
   selectSlot(court: CourtRecord, slot: TimeSlot): void {
     if (!this.isAuthenticated()) {
       this.showAuthWarning.set(true);
@@ -146,19 +175,45 @@ export class RentPageComponent implements OnInit {
     this.bookingError.set(null);
     this.bookingSuccess.set(null);
 
+    // El abono obligatorio inicial es el 50% de la tarifa
+    const depositAmount = court.priceVal * 0.5;
+
     const request: CreateBookingRequest = {
       courtId: court.id,
       date: this.selectedDate(),
       startHour: slot.hour,
-      depositAmount: court.priceVal
+      depositAmount: depositAmount
     };
 
+    // 1. Crear la reserva en estado Pendiente
     this.bookingsService.create(request).subscribe({
       next: (response) => {
-        this.bookingLoading.set(false);
-        this.bookingSuccess.set(`¡Reserva realizada con éxito para ${court.name} a las ${slot.time}!`);
-        this.loadData(); // Refresh availability
-        setTimeout(() => this.bookingSuccess.set(null), 5000);
+        const bookingId = response.data?.id;
+        if (!bookingId) {
+          this.bookingLoading.set(false);
+          this.bookingError.set('Error al inicializar la reserva.');
+          return;
+        }
+
+        // 2. Iniciar la transacción Webpay Plus
+        this.bookingsService.initiatePayment(bookingId, 'SESSION_RENT').subscribe({
+          next: (paymentRes) => {
+            this.bookingLoading.set(false);
+            const data = paymentRes.data;
+            if (data && data.urlRedireccion && data.token) {
+              // 3. Redirigir a la pasarela de pagos REAL de Transbank (Ambiente de Integración)
+              const redirectUrl = `${data.urlRedireccion}?token_ws=${data.token}`;
+              window.location.href = redirectUrl;
+            } else {
+              this.bookingError.set('Error al iniciar la transacción con la pasarela de Transbank.');
+            }
+          },
+          error: (err) => {
+            this.bookingLoading.set(false);
+            this.bookingError.set('Error al conectar con la pasarela de pagos.');
+            console.error(err);
+          }
+        });
       },
       error: (err) => {
         this.bookingLoading.set(false);
