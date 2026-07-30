@@ -15,4 +15,14 @@ export const AUTH_ROUTES: Routes = [
     loadComponent: () =>
       import('./pages/register-page/register-page.component').then((m) => m.RegisterPageComponent),
   },
+  {
+    path: 'google-sim',
+    loadComponent: () =>
+      import('./pages/google-sim-page/google-sim-page.component').then((m) => m.GoogleSimPageComponent),
+  },
+  {
+    path: 'google-callback',
+    loadComponent: () =>
+      import('./pages/google-callback-page/google-callback-page.component').then((m) => m.GoogleCallbackPageComponent),
+  },
 ];
