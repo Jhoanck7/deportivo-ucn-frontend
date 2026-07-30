@@ -1,0 +1,336 @@
+<div class="page-container animate-fade-in">
+  <header class="content-header">
+    <div class="header-titles">
+      <h2>Noticias y Eventos</h2>
+      <p>Gestión del canal de comunicación oficial y cartelera del club</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreateModal()">
+      @if (activeTab() === 'news') {
+        Crear Noticia
+      } @else {
+        Crear Evento
+      }
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 0px;">
+        <line x1="12" y1="5" x2="12" y2="19"></line>
+        <line x1="5" y1="12" x2="19" y2="12"></line>
+      </svg>
+    </button>
+  </header>
+
+  <!-- Pestañas de Navegación -->
+  <div class="tab-navigation">
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'news'"
+      (click)="setTab('news')"
+    >
+      📰 Noticias y Artículos
+    </button>
+    <button 
+      class="tab-btn" 
+      [class.active]="activeTab() === 'events'"
+      (click)="setTab('events')"
+    >
+      📅 Eventos y Convocatorias
+    </button>
+  </div>
+
+  @if (isLoading()) {
+    <div class="table-card loading-state">
+      <p>Cargando información oficial...</p>
+    </div>
+  } @else {
+    
+    <!-- 📰 PESTAÑA NOTICIAS -->
+    @if (activeTab() === 'news') {
+      <section class="table-card">
+        <div class="card-header table-card-header">
+          <h3>Listado de Noticias</h3>
+          <span class="badge" style="background-color: #f1f5f9; color: var(--text-main);">
+            Total: {{ newsList().length }} noticias
+          </span>
+        </div>
+
+        <div class="table-container">
+          <table class="reservas-table">
+            <thead>
+              <tr>
+                <th>TITULO</th>
+                <th>CATEGORÍA</th>
+                <th>FECHA PUBLICACIÓN</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (news of newsList(); track news.id) {
+                <tr class="table-row">
+                  <td class="user-cell" style="font-weight: 700; color: var(--color-primary);">
+                    {{ news.title }}
+                  </td>
+                  <td>
+                    <span class="badge" style="background-color: #eff6ff; color: #1e40af;">
+                      {{ news.category }}
+                    </span>
+                  </td>
+                  <td style="font-size: 0.88rem;">{{ formatDate(news.date) }}</td>
+                  <td>
+                    <button type="button" class="btn btn-action-delete" (click)="onDeleteNews(news.id, news.title)" title="Eliminar noticia">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="no-records-cell">No hay noticias registradas. Crea una usando el botón superior.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+    <!-- 📅 PESTAÑA EVENTOS -->
+    @if (activeTab() === 'events') {
+      <section class="table-card">
+        <div class="card-header table-card-header">
+          <h3>Cartelera de Eventos</h3>
+          <span class="badge" style="background-color: #f1f5f9; color: var(--text-main);">
+            Total: {{ eventsList().length }} eventos
+          </span>
+        </div>
+
+        <div class="table-container">
+          <table class="reservas-table">
+            <thead>
+              <tr>
+                <th>EVENTO</th>
+                <th>UBICACIÓN</th>
+                <th>FECHA EVENTO</th>
+                <th>ACCIONES</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (evt of eventsList(); track evt.id) {
+                <tr class="table-row">
+                  <td class="user-cell" style="font-weight: 700; color: var(--color-primary);">
+                    {{ evt.title }}
+                  </td>
+                  <td style="font-size: 0.88rem; font-weight: 600; color: var(--text-main);">{{ evt.location }}</td>
+                  <td style="font-size: 0.88rem;">{{ formatDate(evt.date) }}</td>
+                  <td>
+                    <button type="button" class="btn btn-action-delete" (click)="onDeleteEvent(evt.id, evt.title)" title="Eliminar evento">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="no-records-cell">No hay eventos ni convocatorias registradas en la cartelera.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
+    }
+
+  }
+
+  <!-- ── MODAL DE CREACIÓN ── -->
+  @if (isModalOpen()) {
+    <div class="modal-backdrop animate-fade-in" (click)="closeModal()">
+      <div class="modal-container animate-slide-up" (click)="$event.stopPropagation()">
+        
+        <header class="modal-header">
+          <div class="header-content">
+            <h3>
+              {{ activeTab() === 'news' ? 'Crear Nueva Noticia' : 'Crear Nuevo Evento' }}
+            </h3>
+            <p class="modal-subtitle">Llenar los datos oficiales a publicar en el Landing Page</p>
+          </div>
+          <button type="button" class="btn-close" (click)="closeModal()" aria-label="Cerrar modal">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </header>
+
+        <!-- 📰 FORMULARIO NOTICIA -->
+        @if (activeTab() === 'news') {
+          <form [formGroup]="newsForm" (ngSubmit)="onSubmit()">
+            <div class="modal-body">
+              
+              <div class="form-group full-width">
+                <label for="newsTitle">Título de la Noticia</label>
+                <input 
+                  id="newsTitle" 
+                  type="text" 
+                  formControlName="title" 
+                  placeholder="Ej. UCN obtiene medalla de oro en atletismo"
+                  [class.invalid]="newsForm.get('title')?.invalid && newsForm.get('title')?.touched"
+                />
+                @if (newsForm.get('title')?.invalid && newsForm.get('title')?.touched) {
+                  <span class="error-msg">Requerido (Mínimo 5 caracteres)</span>
+                }
+              </div>
+
+              <div class="form-group full-width">
+                <label for="newsCategory">Categoría</label>
+                <select id="newsCategory" formControlName="category">
+                  <option value="CONVOCATORIA">Convocatoria</option>
+                  <option value="ÉXITO DEPORTIVO">Éxito Deportivo</option>
+                  <option value="INFRAESTRUCTURA">Infraestructura</option>
+                  <option value="AVISO">Aviso General</option>
+                </select>
+              </div>
+
+              <div class="form-group full-width">
+                <label for="newsImageUrl">Imagen de la Noticia</label>
+                <div style="display: flex; gap: 0.5rem; align-items: center; margin-bottom: 0.25rem; width: 100%;">
+                  <input 
+                    id="newsImageUrl" 
+                    type="text" 
+                    formControlName="imageUrl" 
+                    placeholder="URL de la imagen o archivo subido..."
+                    style="flex-grow: 1;"
+                    [class.invalid]="newsForm.get('imageUrl')?.invalid && newsForm.get('imageUrl')?.touched"
+                  />
+                  <label for="fileUploadInput" class="btn btn-secondary" style="margin: 0; padding: 0.7rem 1.25rem; font-size: 0.85rem; font-weight: 700; border-color: #cbd5e1; white-space: nowrap; display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; background-color: #f8fafc; border: 1.5px solid #cbd5e1; border-radius: 12px; height: 100%; box-sizing: border-box; color: var(--text-main);">
+                    @if (isUploadingImage()) {
+                      Subiendo...
+                      <span class="btn-spinner" style="border-top-color: #1e3a8a; width: 12px; height: 12px; margin-left: 0.25rem; margin-right: 0;"></span>
+                    } @else {
+                      Subir Foto
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    }
+                  </label>
+                  <input 
+                    id="fileUploadInput" 
+                    type="file" 
+                    accept="image/*" 
+                    style="display: none;" 
+                    (change)="onFileSelected($event)"
+                    [disabled]="isUploadingImage()"
+                  />
+                </div>
+                @if (newsForm.get('imageUrl')?.invalid && newsForm.get('imageUrl')?.touched) {
+                  <span class="error-msg">Debe ingresar una dirección de imagen o subir una foto</span>
+                }
+              </div>
+
+              <div class="form-group full-width">
+                <label for="newsContent">Contenido / Cuerpo</label>
+                <textarea 
+                  id="newsContent" 
+                  formControlName="content" 
+                  rows="4"
+                  placeholder="Escribe el cuerpo de la noticia o artículo aquí..."
+                  [class.invalid]="newsForm.get('content')?.invalid && newsForm.get('content')?.touched"
+                  style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.7rem 1rem; font-family: inherit; font-size: 0.92rem; outline: none; resize: vertical;"
+                ></textarea>
+                @if (newsForm.get('content')?.invalid && newsForm.get('content')?.touched) {
+                  <span class="error-msg">Requerido (Mínimo 10 caracteres)</span>
+                }
+              </div>
+
+            </div>
+
+            <footer class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+              <button type="submit" class="btn btn-primary btn-save" [disabled]="newsForm.invalid || isSaving()">
+                @if (isSaving()) {
+                  Publicando...
+                  <span class="btn-spinner"></span>
+                } @else {
+                  Publicar Noticia
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                }
+              </button>
+            </footer>
+          </form>
+        }
+
+        <!-- 📅 FORMULARIO EVENTO -->
+        @if (activeTab() === 'events') {
+          <form [formGroup]="eventForm" (ngSubmit)="onSubmit()">
+            <div class="modal-body">
+              
+              <div class="form-group full-width">
+                <label for="eventTitle">Nombre del Evento</label>
+                <input 
+                  id="eventTitle" 
+                  type="text" 
+                  formControlName="title" 
+                  placeholder="Ej. Clínica de Tenis de Mesa Abierta"
+                  [class.invalid]="eventForm.get('title')?.invalid && eventForm.get('title')?.touched"
+                />
+                @if (eventForm.get('title')?.invalid && eventForm.get('title')?.touched) {
+                  <span class="error-msg">Requerido (Mínimo 5 caracteres)</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="eventDate">Fecha del Evento</label>
+                <input 
+                  id="eventDate" 
+                  type="date" 
+                  formControlName="date" 
+                  [class.invalid]="eventForm.get('date')?.invalid && eventForm.get('date')?.touched"
+                />
+                @if (eventForm.get('date')?.invalid && eventForm.get('date')?.touched) {
+                  <span class="error-msg">Fecha obligatoria</span>
+                }
+              </div>
+
+              <div class="form-group">
+                <label for="eventLocation">Lugar / Sector</label>
+                <input 
+                  id="eventLocation" 
+                  type="text" 
+                  formControlName="location" 
+                  placeholder="Ej. Gimnasio Techado Principal"
+                  [class.invalid]="eventForm.get('location')?.invalid && eventForm.get('location')?.touched"
+                />
+                @if (eventForm.get('location')?.invalid && eventForm.get('location')?.touched) {
+                  <span class="error-msg">Lugar obligatorio</span>
+                }
+              </div>
+
+              <div class="form-group full-width">
+                <label for="eventDesc">Descripción del Evento</label>
+                <textarea 
+                  id="eventDesc" 
+                  formControlName="description" 
+                  rows="3"
+                  placeholder="Describe los detalles del evento, inscripciones, etc..."
+                  [class.invalid]="eventForm.get('description')?.invalid && eventForm.get('description')?.touched"
+                  style="width: 100%; border: 1.5px solid #e2e8f0; border-radius: 12px; padding: 0.7rem 1rem; font-family: inherit; font-size: 0.92rem; outline: none; resize: vertical;"
+                ></textarea>
+                @if (eventForm.get('description')?.invalid && eventForm.get('description')?.touched) {
+                  <span class="error-msg">Requerido (Mínimo 10 caracteres)</span>
+                }
+              </div>
+
+            </div>
+
+            <footer class="modal-footer">
+              <button type="button" class="btn btn-secondary" (click)="closeModal()">Cancelar</button>
+              <button type="submit" class="btn btn-primary btn-save" [disabled]="eventForm.invalid || isSaving()">
+                @if (isSaving()) {
+                  Publicando...
+                  <span class="btn-spinner"></span>
+                } @else {
+                  Publicar Evento
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                }
+              </button>
+            </footer>
+          </form>
+        }
+
+      </div>
+    </div>
+  }
+</div>
