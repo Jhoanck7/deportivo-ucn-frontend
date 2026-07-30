@@ -1,17 +1,24 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SportBranchesService, SportBranch } from '../../services/sport-branches.service';
+import{ BranchFormComponent }from '../../components/make-branch/make-branch-form.component';
+
 
 @Component({
   selector: 'app-sport-branch-page',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BranchFormComponent ],
   templateUrl: './sport-branch-page.component.html',
+  styleUrl: './sport-branch-page.component.css'
 })
 export class SportBranchPageComponent implements OnInit {
   private branchesService = inject(SportBranchesService);
   branches = signal<SportBranch[]>([]);
   isLoading = signal<boolean>(false);
+  isModalOpen = signal<boolean>(false);
+  isSaving = signal<boolean>(false);
+  selectedBranch = signal<SportBranch | undefined>(undefined); // Para edición
+
 
   ngOnInit(): void {
     this.loadBranches();
@@ -27,6 +34,69 @@ export class SportBranchPageComponent implements OnInit {
       error: (err) => {
         console.error('Error loading branches', err);
         this.isLoading.set(false);
+      }
+    });
+  }
+
+  openCreateModal(): void {
+    this.selectedBranch.set(undefined);
+    this.isModalOpen.set(true);
+  }
+
+  openEditModal(branch: SportBranch): void {
+    this.selectedBranch.set(branch);
+    this.isModalOpen.set(true);
+  }
+
+  closeCreateModal(): void {
+    this.isModalOpen.set(false);
+    this.selectedBranch.set(undefined);
+  }
+
+  saveNewBranch(branchData: any): void {
+    this.isSaving.set(true);
+    const editingBranch = this.selectedBranch();
+
+    if (editingBranch) {
+      // Modo Edición
+      this.branchesService.update(editingBranch.id, branchData).subscribe({
+        next: (response) => {
+          this.isSaving.set(false);
+          this.closeCreateModal();
+          this.loadBranches();
+        },
+        error: (err) => {
+          console.error('Error updating sports branch:', err);
+          this.isSaving.set(false);
+        }
+      });
+    } else {
+      // Modo Creación
+      this.branchesService.create(branchData).subscribe({
+        next: (response) => {
+          this.isSaving.set(false);
+          this.closeCreateModal();
+          this.loadBranches();
+        },
+        error: (err) => {
+          console.error('Error creating sports branch:', err);
+          this.isSaving.set(false);
+        }
+      });
+    }
+  }
+
+  deleteBranch(id: number): void {
+    this.isSaving.set(true);
+    this.branchesService.delete(id).subscribe({
+      next: (response) => {
+        this.isSaving.set(false);
+        this.closeCreateModal();
+        this.loadBranches();
+      },
+      error: (err) => {
+        console.error('Error deleting sports branch:', err);
+        this.isSaving.set(false);
       }
     });
   }

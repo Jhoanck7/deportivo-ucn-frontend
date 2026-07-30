@@ -1,0 +1,197 @@
+/* ==========================================================================
+   Contenedor de la Página y Animaciones Base
+   ========================================================================== */
+.page-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+/* ==========================================================================
+   Header de la Feature
+   ========================================================================== */
+.content-header {
+  margin-bottom: 2rem;
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  padding-bottom: 1rem;
+}
+
+.header-titles h2 {
+  color: var(--color-primary);
+  font-size: 1.8rem;
+  font-weight: 800;
+  margin: 0 0 0.5rem 0;
+}
+
+.header-titles p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Grid y Layout Responsivo
+   ========================================================================== */
+.grid-responsive {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+/* ==========================================================================
+   Tarjetas de Ramas Deportivas (Feature Card)
+   ========================================================================== */
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  border-radius: var(--border-radius-xl);
+  background-color: var(--color-card);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Efecto Hover Senior para la tarjeta */
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 20px -5px rgba(0, 0, 0, 0.1), 0 8px 8px -5px rgba(0, 0, 0, 0.04);
+  border-color: var(--color-primary);
+}
+
+/* Estados de Carga y Vacío */
+.feature-card.loading,
+.feature-card.empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+}
+
+.feature-card.loading p,
+.feature-card.empty p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Elementos Internos de la Tarjeta
+   ========================================================================== */
+
+/* Contenedor de la Imagen superior */
+.branch-image-wrapper {
+  width: calc(100% + 3rem);
+  height: 150px;
+  margin: -1.5rem -1.5rem 1.25rem -1.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.branch-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+/* Zoom suave a la foto al pasar el mouse por la tarjeta */
+.feature-card:hover .branch-image-wrapper img {
+  transform: scale(1.08);
+}
+
+/* Badge Flotante del Sector de Entrenamiento (sobre la imagen) */
+.sector-badge {
+  position: absolute;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  background-color: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  padding: 0.35rem 0.75rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+/* Fila de Título e ID */
+.card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 1.25rem;
+}
+
+.card-header-row h3 {
+  color: var(--color-primary);
+  font-weight: 800;
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Badge de Identificación */
+.id-badge {
+  background-color: #eff6ff;
+  color: #1e40af;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+}
+
+/* Listado de Detalles (Días, Horarios, Cupos) */
+.card-info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-item svg {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.info-item strong {
+  color: var(--color-accent);
+}
+
+/* ==========================================================================
+   Efectos de Micro-Interacciones (Keyframes)
+   ========================================================================== */
+.animate-fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(0);
+  }
+}
