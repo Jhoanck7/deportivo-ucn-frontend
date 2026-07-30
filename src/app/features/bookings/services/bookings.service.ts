@@ -40,4 +40,13 @@ export class BookingsService {
       params,
     });
   }
+
+  initiatePayment(bookingId: number, returnType: string = 'SESSION_RENT'): Observable<ApiResponse<{ token: string, urlRedireccion: string, amount: number, courtName: string }>> {
+    const params = new HttpParams().set('returnType', returnType);
+    return this.http.post<ApiResponse<{ token: string, urlRedireccion: string, amount: number, courtName: string }>>('transacciones/iniciar', { bookingId }, { params });
+  }
+
+  confirmPayment(tokenWs: string, bookingId: number): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>('transacciones/confirmar', { tokenWs, bookingId });
+  }
 }

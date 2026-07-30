@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AthletesService } from '../../../../athletes/services/athletes.service';
 import { Athlete } from '../../../../../shared/models/athlete.model';
+import { SportBranchesService, SportBranch } from '../../services/sport-branches.service';
 
 @Component({
   selector: 'app-roster-page',
@@ -12,14 +13,18 @@ import { Athlete } from '../../../../../shared/models/athlete.model';
 })
 export class RosterPageComponent implements OnInit {
   private athletesService = inject(AthletesService);
+  private branchesService = inject(SportBranchesService);
 
   athletes = signal<Athlete[]>([]);
+  branches = signal<SportBranch[]>([]);
   filteredAthletes = signal<Athlete[]>([]);
   isLoading = signal<boolean>(false);
   searchQuery = signal<string>('');
+  selectedBranchId = signal<string>(''); // ID de la rama para filtrar
 
   ngOnInit(): void {
     this.loadAthletes();
+    this.loadBranches();
   }
 
   loadAthletes(): void {
@@ -38,26 +43,53 @@ export class RosterPageComponent implements OnInit {
     });
   }
 
+  loadBranches(): void {
+    this.branchesService.list().subscribe({
+      next: (response) => {
+        this.branches.set(response.data || []);
+      },
+      error: (err) => {
+        console.error('Error loading branches', err);
+      }
+    });
+  }
+
   onSearch(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
     this.searchQuery.set(value);
     this.applyFilter();
   }
 
+  onBranchFilterChange(event: Event): void {
+    const value = (event.target as HTMLSelectElement).value;
+    this.selectedBranchId.set(value);
+    this.applyFilter();
+  }
+
   applyFilter(): void {
     const query = this.searchQuery().trim().toLowerCase();
-    if (!query) {
-      this.filteredAthletes.set(this.athletes());
-      return;
+    const branchIdStr = this.selectedBranchId();
+
+    let filtered = this.athletes();
+
+    // 1. Filtrar por búsqueda textual
+    if (query) {
+      filtered = filtered.filter(
+        (a) =>
+          a.firstName.toLowerCase().includes(query) ||
+          a.lastName.toLowerCase().includes(query) ||
+          a.rut.toLowerCase().includes(query) ||
+          a.email.toLowerCase().includes(query) ||
+          a.sportBranchName.toLowerCase().includes(query)
+      );
     }
-    const filtered = this.athletes().filter(
-      (a) =>
-        a.firstName.toLowerCase().includes(query) ||
-        a.lastName.toLowerCase().includes(query) ||
-        a.rut.toLowerCase().includes(query) ||
-        a.email.toLowerCase().includes(query) ||
-        a.sportBranchName.toLowerCase().includes(query)
-    );
+
+    // 2. Filtrar por rama deportiva seleccionada
+    if (branchIdStr) {
+      const branchId = parseInt(branchIdStr, 10);
+      filtered = filtered.filter((a) => a.sportBranchId === branchId);
+    }
+
     this.filteredAthletes.set(filtered);
   }
 

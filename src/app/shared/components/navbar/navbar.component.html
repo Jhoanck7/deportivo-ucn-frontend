@@ -1,7 +1,7 @@
 <nav class="navbar">
-    <!--brand-->
-    <div class="navbar-brand">
-        <a>DeportivoUcn</a>
+    <div class="navbar-brand" style="display: flex; align-items: center; gap: 0.6rem; cursor: pointer;" routerLink="/home">
+        <img src="/logo.jpg" alt="Logo Deportivo UCN" style="height: 38px; width: 38px; border-radius: 8px; object-fit: cover; border: 1.5px solid #1e3a8a;" />
+        <a style="font-weight: 850; letter-spacing: -0.5px;">DeportivoUCN</a>
     </div>
     <!--menu-->
     <ul class="navbar-links">
@@ -15,6 +15,11 @@
   <div class="navbar-actions">
     @if (isAuthenticated()) {
       <span class="user-badge">{{ currentUser()?.firstName }} {{ currentUser()?.lastName }} ({{ currentUser()?.role }})</span>
+      @if (currentUser()?.role === 'Admin') {
+        <button routerLink="/dashboard-admin" class="btn btn-secondary" style="margin-left: 0.75rem; background-color: var(--color-primary-light, #1e3a8a); color: white; border: none; padding: 0.5rem 1rem; border-radius: 50px; font-weight: 700; cursor: pointer; transition: background-color 0.2s;" onmouseover="this.style.backgroundColor='#1e40af';" onmouseout="this.style.backgroundColor='#1e3a8a';">
+          Panel Admin
+        </button>
+      }
       <button (click)="logout()" class="btn btn-primary">Salir</button>
     } @else {
       <!-- Selectores de prueba rápida para que verifiques cómo cambia el Navbar en vivo -->

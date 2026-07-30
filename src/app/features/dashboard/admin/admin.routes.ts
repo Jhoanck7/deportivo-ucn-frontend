@@ -21,4 +21,11 @@ export const ADMIN_ROUTES: Routes = [
         (m) => m.SportBranchPageComponent,
       ),
   },
+  {
+    path: 'news-events',
+    loadComponent: () =>
+      import('./pages/news-events-page/news-events-page.component').then(
+        (m) => m.NewsEventsPageComponent,
+      ),
+  },
 ];

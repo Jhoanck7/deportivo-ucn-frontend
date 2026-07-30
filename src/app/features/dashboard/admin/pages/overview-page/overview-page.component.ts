@@ -121,6 +121,8 @@ export class OverviewPageComponent implements OnInit {
             realStatus: b.status
           };
         });
+        // Ordenar por ID descendente para mostrar las reservas más nuevas primero
+        mapped.sort((a, b) => b.id - a.id);
         this.totalBookings.set(mapped);
 
         // Update KPIs

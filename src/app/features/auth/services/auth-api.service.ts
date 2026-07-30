@@ -25,4 +25,8 @@ export class AuthApiService {
   getUserById(id: number): Observable<ApiResponse<UserProfile>> {
     return this.http.get<ApiResponse<UserProfile>>(`${this.base}/users/${id}`);
   }
+
+  googleLogin(idToken: string): Observable<ApiResponse<AuthUserData>> {
+    return this.http.post<ApiResponse<AuthUserData>>(`${this.base}/google`, { idToken });
+  }
 }
