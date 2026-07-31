@@ -1,0 +1,208 @@
+/* ── 1. CONFIGURACIÓN DE CABECERAS Y TEXTOS ── */
+.rent-main-title {
+  font-size: 2.2rem;
+  font-weight: 850;
+  color: var(--color-primary);
+  margin: 0;
+}
+
+.rent-subtitle {
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+  font-size: 0.95rem;
+}
+
+/* ── 2. ALERTAS Y BANNER DE RESTRICCIÓN ── */
+.alert-box {
+  padding: 1.2rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 700;
+}
+
+.alert-box-danger {
+  background-color: var(--color-danger-light);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #991b1b;
+}
+
+/* ── 3. CONTROLES Y FILTROS SUPERIORES ── */
+.filter-bar {
+  background-color: var(--color-card);
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid #e2e8f0;
+}
+
+.time-tabs {
+  display: flex;
+  background-color: #f1f5f9;
+  padding: 0.25rem;
+  border-radius: 50px;
+}
+
+.time-tabs button {
+  padding: 0.6rem 1.4rem;
+  background: transparent;
+  border: none;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition-smooth);
+}
+
+.time-tabs button.active {
+  background-color: var(--color-card);
+  color: var(--color-primary-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.visitor-indicator-tag {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  background-color: #f1f5f9;
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+}
+
+/* ── 4. TARJETAS DE CANCHAS INTERNAS ── */
+.court-rent-card {
+  transition: var(--transition-smooth);
+}
+
+.court-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.court-info-group {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.court-icon-wrapper {
+  font-size: 2.2rem;
+  background-color: var(--color-background);
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius-md);
+}
+
+.court-name-title {
+  color: var(--color-primary);
+  font-weight: 800;
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+.court-type-desc {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-top: 0.1rem;
+}
+
+.court-price-block {
+  text-align: right;
+}
+
+.court-price-value {
+  font-size: 1.3rem;
+  font-weight: 850;
+  color: var(--color-accent);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem
+}
+
+.court-price-label {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-light);
+  text-transform: uppercase;
+}
+
+.slots-heading-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-light);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.75rem;
+}
+
+/* ── 5. GRID DE BLOQUES HORARIOS (SLOTS) ── */
+.slots-layout-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.slot-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1rem;
+  background-color: var(--color-background);
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--border-radius-md);
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: var(--transition-smooth);
+}
+
+.slot-time-text {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.slot-status-indicator {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-success);
+  margin-top: 0.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.slot-tile:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-light);
+  transform: translateY(-1px);
+}
+
+.slot-tile:hover:not(:disabled) .slot-time-text {
+  color: var(--color-accent);
+}
+
+/* Estado Ocupado / Deshabilitado */
+.slot-tile:disabled, .slot-tile.slot-booked {
+  background-color: #f1f5f9 !important;
+  border-color: #e2e8f0 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+.slot-tile:disabled .slot-time-text {
+  color: var(--text-light) !important;
+  text-decoration: line-through;
+}
+
+.slot-tile:disabled .slot-status-indicator {
+  color: var(--text-light) !important;
+}

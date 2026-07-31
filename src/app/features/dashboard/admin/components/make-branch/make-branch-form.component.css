@@ -1,0 +1,318 @@
+/* ==========================================================================
+   🏆 BRANCH FORM MODAL — PREMIUM DESIGN & ESTRUCTURA DE COMPONENTES
+   ========================================================================== */
+
+/* ── 1. CONTENEDOR Y RESPALDO (BACKDROP) ── */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(7, 14, 39, 0.45); /* Navy oscuro translúcido */
+  backdrop-filter: blur(8px); /* Difuminado premium */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999; /* Garantiza estar por encima de todo el shell */
+}
+
+.modal-container {
+  background-color: var(--color-card, #ffffff);
+  width: 92%;
+  max-width: 540px;
+  border-radius: var(--border-radius-lg, 16px);
+  box-shadow: 0 25px 50px -12px rgba(7, 14, 39, 0.25);
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transform-origin: center;
+}
+
+/* ── 2. ENCABEZADO MODAL (HEADER) ── */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #f1f5f9;
+  background-color: #ffffff;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-primary, #070e27);
+  letter-spacing: -0.3px;
+}
+
+.modal-subtitle {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-muted, #64748b);
+  font-weight: 500;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: var(--text-light, #94a3b8);
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-top: -0.25rem;
+  margin-right: -0.5rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition-smooth, all 0.2s ease);
+}
+
+.btn-close:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main, #0f172a);
+  transform: rotate(90deg);
+}
+
+/* ── 3. CUERPO MODAL CON CUADRÍCULA (GRID) ── */
+.modal-body {
+  padding: 1.5rem 2rem;
+  background-color: #ffffff;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 1.25rem;
+  row-gap: 1.1rem;
+  max-height: calc(85vh - 120px);
+  overflow-y: auto;
+}
+
+/* Scrollbar premium para el cuerpo del modal si desborda */
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-body::-webkit-scrollbar-track {
+  background: transparent;
+}
+.modal-body::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Posicionamiento en Grilla */
+.full-width {
+  grid-column: span 2;
+}
+
+/* Ajustes de etiquetas y SVGs */
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--text-muted, #64748b);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 0.4rem;
+}
+
+.label-icon {
+  width: 14px;
+  height: 14px;
+  color: var(--color-primary-light, #1e3a8a);
+  opacity: 0.85;
+}
+
+/* Inputs, Selects y Focos */
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--border-radius-md, 12px);
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--text-main, #0f172a);
+  background-color: #ffffff;
+  transition: var(--transition-smooth, all 0.2s ease);
+}
+
+.form-group input::placeholder {
+  color: var(--text-light, #94a3b8);
+  font-weight: 400;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--color-primary-light, #1e3a8a);
+  box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.08);
+}
+
+/* ── 4. BOTONES PRESIONABLES DE DÍAS (DAYS BTN CONTAINER) ── */
+.days-button-container {
+  display: flex;
+  gap: 0.4rem;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 0.2rem;
+  flex-wrap: wrap;
+}
+
+.day-btn {
+  flex: 1;
+  min-width: 42px;
+  padding: 0.65rem 0.2rem;
+  background-color: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--border-radius-sm, 8px);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted, #64748b);
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  transition: var(--transition-smooth, all 0.2s ease);
+}
+
+.day-btn:hover {
+  background-color: #f8fafc;
+  border-color: #cbd5e1;
+  color: var(--text-main, #0f172a);
+}
+
+.day-btn.active {
+  background-color: var(--color-primary-light, #1e3a8a);
+  border-color: var(--color-primary-light, #1e3a8a);
+  color: #ffffff;
+  box-shadow: 0 4px 10px -2px rgba(30, 58, 138, 0.2);
+}
+
+/* Input de tipo time especificidades visuales */
+.form-group input[type="time"] {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+/* ── 5. GRUPO MÁXIMO DE CUPOS (LIMIT INPUT WRAPPER) ── */
+.limit-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.limit-input-wrapper input {
+  padding-right: 4.5rem; /* Espacio para el badge interno */
+}
+
+.limit-badge {
+  position: absolute;
+  right: 12px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--color-primary-light, #1e3a8a);
+  background-color: rgba(30, 58, 138, 0.06);
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+}
+
+/* ── 6. ALERTAS DE ERROR Y VALIDACIONES ── */
+.error-msg {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-danger, #ef4444);
+  margin-top: 0.35rem;
+  animation: errorSlideIn 0.2s ease forwards;
+}
+
+@keyframes errorSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── 7. PIE DE MODAL (FOOTER) ── */
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.25rem 2rem;
+  border-top: 1px solid #f1f5f9;
+  background-color: #f8fafc;
+}
+
+.modal-footer .btn {
+  padding: 0.7rem 1.4rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.modal-footer .btn-secondary {
+  border-color: #cbd5e1;
+  background-color: #ffffff;
+  color: var(--text-muted, #64748b);
+}
+
+.modal-footer .btn-secondary:hover {
+  background-color: #f1f5f9;
+  color: var(--text-main, #0f172a);
+}
+
+.btn-save {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--color-primary, #070e27);
+  color: #ffffff;
+}
+
+.btn-save:hover:not(:disabled) {
+  background-color: var(--color-primary-light, #1e3a8a);
+}
+
+.btn-save svg {
+  margin-left: 0.15rem;
+  transition: transform 0.2s ease;
+}
+
+.btn-save:hover:not(:disabled) svg {
+  transform: scale(1.1) translateX(2px);
+}
+
+.btn-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: btnSpinnerSpin 0.8s linear infinite;
+  margin-left: 0.5rem;
+}
+
+@keyframes btnSpinnerSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}

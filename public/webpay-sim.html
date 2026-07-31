@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Transbank Webpay Plus — Simulación de Pago</title>
+<style>
+  body { font-family: Helvetica, Arial, sans-serif; background: #eceff1; margin: 0; padding: 0; display: flex; align-items: center; justify-content: center; height: 100vh; }
+  .webpay-box { width: 100%; max-width: 480px; background: #ffffff; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); overflow: hidden; }
+  .webpay-header { background: #e02424; color: #fff; padding: 20px; display: flex; justify-content: space-between; align-items: center; }
+  .webpay-header h1 { font-size: 20px; margin: 0; font-weight: bold; }
+  .webpay-logo { font-size: 22px; font-weight: 900; letter-spacing: -1px; }
+  .webpay-body { padding: 25px; color: #374151; }
+  .row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; }
+  .row.total { border-top: 1px solid #e5e7eb; padding-top: 12px; font-weight: bold; font-size: 16px; color: #111827; }
+  .form-group { margin-bottom: 15px; }
+  label { display: block; font-size: 12px; font-weight: bold; text-transform: uppercase; color: #6b7280; margin-bottom: 5px; }
+  input, select { width: 100%; padding: 10px; border: 1.5px solid #d1d5db; border-radius: 6px; font-size: 14px; box-sizing: border-box; }
+  input:focus, select:focus { outline: none; border-color: #e02424; }
+  .actions { display: flex; gap: 10px; margin-top: 20px; }
+  button { flex: 1; padding: 12px; border-radius: 6px; font-size: 14px; font-weight: bold; cursor: pointer; border: none; }
+  .btn-pay { background: #e02424; color: #fff; }
+  .btn-pay:hover { background: #c21c1c; }
+  .btn-cancel { background: #f3f4f6; color: #4b5563; border: 1.5px solid #d1d5db; }
+  .btn-cancel:hover { background: #e5e7eb; }
+  .loader { display: none; text-align: center; padding: 20px; font-size: 14px; font-weight: bold; color: #6b7280; }
+  .loader-spinner { border: 3px solid #f3f3f3; border-top: 3px solid #e02424; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 0 auto 10px auto; }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="webpay-box">
+  <header class="webpay-header">
+    <span class="webpay-logo">webpay<span style="color: #ffca28;">plus</span></span>
+    <h1>Pago Simulado</h1>
+  </header>
+
+  <div class="webpay-body" id="payment-form">
+    <div class="row">
+      <span>Comercio:</span>
+      <strong>Deportes UCN</strong>
+    </div>
+    <div class="row">
+      <span>Concepto:</span>
+      <strong id="desc-cancha">Arriendo de Cancha</strong>
+    </div>
+    <div class="row">
+      <span>Orden de Compra:</span>
+      <strong id="desc-orden">#0000</strong>
+    </div>
+    <div class="row total">
+      <span>Monto a pagar:</span>
+      <span id="desc-monto">$0</span>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+
+    <div class="form-group">
+      <label>Método de Pago</label>
+      <select id="selMetodo">
+        <option value="debito">Tarjeta de Débito (Redcompra)</option>
+        <option value="credito">Tarjeta de Crédito</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Número de Tarjeta (Prueba)</label>
+      <input type="text" value="5912 4912 9012 3456" placeholder="XXXX XXXX XXXX XXXX" disabled>
+    </div>
+
+    <div class="actions">
+      <button class="btn-cancel" onclick="cancelar()">Anular</button>
+      <button class="btn-pay" onclick="pagar()">Pagar</button>
+    </div>
+  </div>
+
+  <div class="webpay-body loader" id="payment-loader">
+    <div class="loader-spinner"></div>
+    <p>Procesando transacción en los servidores de Transbank...</p>
+  </div>
+</div>
+
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const token = urlParams.get('token_ws') || 'tbk_token_dummy';
+const bookingId = Number(urlParams.get('bookingId')) || 0;
+const amount = Number(urlParams.get('amount')) || 0;
+const courtName = urlParams.get('court') || 'Cancha';
+const returnUrl = urlParams.get('returnUrl') || 'http://localhost:4200/rent';
+
+document.getElementById('desc-cancha').textContent = courtName;
+document.getElementById('desc-orden').textContent = `#${bookingId}`;
+document.getElementById('desc-monto').textContent = `$${amount.toLocaleString('es-CL')}`;
+
+function cancelar() {
+  if (confirm("¿Estás seguro de que deseas anular el pago?")) {
+    window.location.href = `${returnUrl}?payment=cancel&bookingId=${bookingId}`;
+  }
+}
+
+async function pagar() {
+  document.getElementById('payment-form').style.display = 'none';
+  document.getElementById('payment-loader').style.display = 'block';
+
+  try {
+    const response = await fetch("http://localhost:5059/api/transacciones/confirmar", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        tokenWs: token,
+        bookingId: bookingId
+      })
+    });
+
+    const body = await response.json();
+    
+    setTimeout(() => {
+      // Redirigir de vuelta al comercio con el token de éxito
+      window.location.href = `${returnUrl}?payment=success&bookingId=${bookingId}&token_ws=${token}`;
+    }, 1500);
+
+  } catch (err) {
+    alert("Error al confirmar el pago en el servidor: " + err.message);
+    document.getElementById('payment-form').style.display = 'block';
+    document.getElementById('payment-loader').style.display = 'none';
+  }
+}
+</script>
+
+</body>
+</html>

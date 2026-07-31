@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Prueba de flujo completo — Reserva de Canchas Deportes UCN</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  body { font-family: Arial, sans-serif; background: #070e27; color: #fff; padding: 20px; max-width: 720px; margin: 0 auto; }
+  h2 { text-align: center; color: #3b82f6; }
+  .paso { background: #111a3e; border: 1px solid #1e295d; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); padding: 15px; margin-bottom: 15px; opacity: 0.4; pointer-events: none; transition: opacity 0.3s ease; }
+  .paso.activo { opacity: 1; pointer-events: auto; border-color: #3b82f6; }
+  .paso.hecho { opacity: 1; pointer-events: auto; border-left: 4px solid #10b981; }
+  .paso h3 { margin-top: 0; color: #93c5fd; }
+  label { display: block; margin-top: 8px; font-size: 13px; color: #cbd5e1; font-weight: bold; }
+  select, input, button { width: 100%; padding: 10px; margin-top: 4px; box-sizing: border-box; font-size: 14px; border-radius: 6px; border: 1.5px solid #1e295d; background: #0f172a; color: #fff; outline: none; }
+  select:focus, input:focus { border-color: #3b82f6; }
+  button { background: #3b82f6; color: #fff; border: none; cursor: pointer; margin-top: 10px; font-weight: bold; transition: background 0.2s; }
+  button:hover { background: #2563eb; }
+  button:disabled { background: #4b5563; cursor: not-allowed; }
+  #log { white-space: pre-wrap; word-break: break-all; background: #020617; color: #10b981; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 11px; max-height: 260px; overflow-y: auto; border: 1px solid #1e295d; }
+  .info { font-size: 13px; background: #1e3a8a; padding: 10px; border-radius: 6px; margin-top: 8px; border: 1px solid #3b82f6; line-height: 1.4; }
+  .error { color: #f87171; font-size: 13px; margin-top: 6px; font-weight: bold; }
+  .badge-free { background-color: #064e3b; color: #34d399; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+  .badge-busy { background-color: #7f1d1d; color: #f87171; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; }
+  .whatsapp-btn { background-color: #10b981; color: white; display: block; text-align: center; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: bold; margin-top: 10px; font-size: 15px; }
+  .whatsapp-btn:hover { background-color: #059669; }
+  .webpay-btn { background-color: #e02424; color: white; display: block; text-align: center; text-decoration: none; padding: 12px; border-radius: 6px; font-weight: bold; margin-top: 10px; font-size: 15px; }
+  .webpay-btn:hover { background-color: #c21c1c; }
+</style>
+</head>
+<body>
+
+<h2>Prueba de flujo completo — Reserva de Canchas</h2>
+
+<div class="paso activo" id="paso-cancha">
+  <h3>1. Cancha</h3>
+  <select id="selCancha"><option value="">Cargando canchas...</option></select>
+</div>
+
+<div class="paso" id="paso-fecha">
+  <h3>2. Fecha de reserva</h3>
+  <input type="date" id="inputFecha">
+  <button id="btnConfirmarFecha">Consultar Disponibilidad</button>
+</div>
+
+<div class="paso" id="paso-franja">
+  <h3>3. Bloque Horario Disponible</h3>
+  <select id="selFranja"><option value="">Selecciona la cancha y fecha primero</option></select>
+</div>
+
+<div class="paso" id="paso-google">
+  <h3>4. Iniciar sesión con Google</h3>
+  <div id="g_id_onload"
+       data-client_id="890308884774-eifs9hbd1t0r1tobbpek1jfsl3tumqah.apps.googleusercontent.com"
+       data-callback="handleCredentialResponse">
+  </div>
+  <div class="g_id_signin" data-type="standard" data-theme="dark"></div>
+  <div class="info" id="infoUsuario" style="display:none;"></div>
+</div>
+
+<div class="paso" id="paso-perfil">
+  <h3>5. Completar datos faltantes (RUT/Teléfono)</h3>
+  <label>RUT (ej: 12.345.678-9)</label>
+  <input type="text" id="inputRut" placeholder="12.345.678-9">
+  <label>Teléfono (ej: +56912345678)</label>
+  <input type="text" id="inputTelefono" placeholder="+56912345678">
+  <button id="btnGuardarPerfil">Guardar perfil</button>
+</div>
+
+<div class="paso" id="paso-reserva">
+  <h3>6. Confirmar reserva y abono inicial</h3>
+  <div id="infoPrecios" class="info" style="margin-bottom: 10px;"></div>
+  <label>Monto de abono (mínimo 50% de la tarifa por hora)</label>
+  <input type="number" id="inputAbono">
+  <button id="btnReservar">Reservar cancha</button>
+</div>
+
+<div class="paso" id="paso-pago">
+  <h3>7. Iniciar pago (Webpay)</h3>
+  <button id="btnIniciarPago">Iniciar transacción</button>
+  <div id="formRedireccion"></div>
+</div>
+
+<div class="paso" id="paso-confirmado">
+  <h3>8. Reserva confirmada y comprobante</h3>
+  <div id="comprobanteReserva" class="info"></div>
+  <div id="whatsappContainer"></div>
+</div>
+
+<h3>Log de Peticiones API</h3>
+<div id="log"></div>
+
+<script>
+const API_BASE = "http://localhost:5059";
+
+const state = {
+  courtId: null,
+  courtName: null,
+  courtPrice: 0,
+  date: null,
+  startHour: null,
+  jwt: null,
+  user: null,
+  bookingData: null
+};
+
+function log(label, data) {
+  const el = document.getElementById("log");
+  el.textContent += `\n--- ${label} ---\n${JSON.stringify(data, null, 2)}\n`;
+  el.scrollTop = el.scrollHeight;
+}
+
+function marcarPaso(id, estado) {
+  const el = document.getElementById(id);
+  el.classList.remove("activo", "hecho");
+  el.classList.add(estado);
+}
+
+async function apiFetch(path, options = {}) {
+  const headers = options.headers || {};
+  headers["Content-Type"] = "application/json";
+  if (state.jwt) headers["Authorization"] = `Bearer ${state.jwt}`;
+  const res = await fetch(`${API_BASE}${path}`, { ...options, headers });
+  const body = await res.json().catch(() => null);
+  log(`${options.method || "GET"} ${path}`, body);
+  if (!res.ok) throw new Error(body?.message || `Error ${res.status}`);
+  return body;
+}
+
+// Paso 1: Cargar canchas
+async function cargarCanchas() {
+  try {
+    const body = await apiFetch("/api/courts");
+    const sel = document.getElementById("selCancha");
+    sel.innerHTML = '<option value="">-- Selecciona Cancha --</option>' +
+      body.data.map(c => `<option value="${c.id}" data-price="${c.pricePerHour}" data-name="${c.name}">${c.name} ($${c.pricePerHour.toLocaleString('es-CL')}/hr)</option>`).join("");
+    
+    // Verificar si regresamos de un pago exitoso
+    verificarRetornoPago();
+  } catch (err) {
+    alert("Error cargando canchas: " + err.message);
+  }
+}
+
+document.getElementById("selCancha").addEventListener("change", (e) => {
+  const selectedOption = e.target.options[e.target.selectedIndex];
+  state.courtId = e.target.value || null;
+  
+  if (!state.courtId) return;
+  state.courtName = selectedOption.getAttribute("data-name");
+  state.courtPrice = Number(selectedOption.getAttribute("data-price"));
+  
+  marcarPaso("paso-cancha", "hecho");
+  marcarPaso("paso-fecha", "activo");
+  
+  // Establecer fecha por defecto (mañana)
+  const mañana = new Date();
+  mañana.setDate(mañana.getDate() + 1);
+  document.getElementById("inputFecha").value = mañana.toISOString().split('T')[0];
+});
+
+// Paso 2: Fecha
+document.getElementById("btnConfirmarFecha").addEventListener("click", async () => {
+  state.date = document.getElementById("inputFecha").value;
+  if (!state.date) {
+    alert("Por favor selecciona una fecha válida");
+    return;
+  }
+  
+  try {
+    marcarPaso("paso-fecha", "hecho");
+    marcarPaso("paso-franja", "activo");
+    
+    const body = await apiFetch(`/api/bookings/availability?courtId=${state.courtId}&date=${state.date}`);
+    const sel = document.getElementById("selFranja");
+    
+    if (body.data.length === 0) {
+      sel.innerHTML = '<option value="">Sin bloques disponibles para este día (recuerde: lunes a viernes)</option>';
+    } else {
+      sel.innerHTML = '<option value="">-- Selecciona un bloque --</option>' +
+        body.data.map(slot => {
+          const statusText = slot.isAvailable ? "Disponible" : "Ocupado";
+          const statusBadge = slot.isAvailable ? "badge-free" : "badge-busy";
+          const disabledAttr = slot.isAvailable ? "" : "disabled";
+          return `<option value="${slot.startHour}" ${disabledAttr}>${slot.startHour}:00 - ${slot.endHour}:00 (${statusText})</option>`;
+        }).join("");
+    }
+  } catch (err) {
+    alert("Error al cargar disponibilidad: " + err.message);
+    marcarPaso("paso-fecha", "activo");
+  }
+});
+
+// Paso 3: Bloque
+document.getElementById("selFranja").addEventListener("change", (e) => {
+  state.startHour = e.target.value || null;
+  if (!state.startHour) return;
+  
+  marcarPaso("paso-franja", "hecho");
+  marcarPaso("paso-google", "activo");
+});
+
+// Paso 4: Google Auth
+async function handleCredentialResponse(response) {
+  try {
+    const body = await apiFetch("/api/auth/google", {
+      method: "POST",
+      body: JSON.stringify({ idToken: response.credential })
+    });
+    
+    state.jwt = body.data.token;
+    state.user = body.data;
+    
+    document.getElementById("infoUsuario").style.display = "block";
+    document.getElementById("infoUsuario").innerHTML = `
+      <strong>Sesión Iniciada con Google:</strong><br>
+      Nombre: ${body.data.firstName} ${body.data.lastName}<br>
+      Correo: ${body.data.email}<br>
+      Rol: ${body.data.role}
+    `;
+    
+    marcarPaso("paso-google", "hecho");
+    
+    // Configurar precios del paso 6
+    const minAbono = state.courtPrice * 0.5;
+    document.getElementById("infoPrecios").innerHTML = `
+      Cancha: <strong>${state.courtName}</strong><br>
+      Fecha y Hora: <strong>${state.date} a las ${state.startHour}:00 hrs</strong><br>
+      Tarifa por Hora: <strong>$${state.courtPrice.toLocaleString('es-CL')}</strong><br>
+      Monto mínimo de abono (50%): <strong>$${minAbono.toLocaleString('es-CL')}</strong>
+    `;
+    document.getElementById("inputAbono").value = minAbono;
+    
+    // Guardar token temporal en sessionStorage para recuperar el flujo tras el redirect
+    sessionStorage.setItem("ucn_test_jwt", state.jwt);
+    sessionStorage.setItem("ucn_test_user", JSON.stringify(state.user));
+    
+    // Enviar a completar perfil si le falta RUT o Teléfono
+    if (!body.data.rut || body.data.rut.startsWith("G-") || !body.data.phone) {
+      marcarPaso("paso-perfil", "activo");
+      if (body.data.rut && !body.data.rut.startsWith("G-")) {
+        document.getElementById("inputRut").value = body.data.rut;
+      }
+      if (body.data.phone) {
+        document.getElementById("inputTelefono").value = body.data.phone;
+      }
+    } else {
+      marcarPaso("paso-perfil", "hecho");
+      marcarPaso("paso-reserva", "activo");
+    }
+  } catch (err) {
+    alert("Error en login Google: " + err.message);
+  }
+}
+
+// Paso 5: Guardar perfil
+document.getElementById("btnGuardarPerfil").addEventListener("click", async () => {
+  try {
+    const rut = document.getElementById("inputRut").value;
+    const telefono = document.getElementById("inputTelefono").value;
+    
+    if (!rut || !telefono) {
+      alert("Por favor complete el RUT y el Teléfono");
+      return;
+    }
+    
+    await apiFetch("/api/auth/profile", {
+      method: "PUT",
+      body: JSON.stringify({ rut, phone: telefono })
+    });
+    
+    marcarPaso("paso-perfil", "hecho");
+    marcarPaso("paso-reserva", "activo");
+  } catch (err) {
+    alert("Error guardando perfil: " + err.message);
+  }
+});
+
+// Paso 6: Confirmar reserva
+document.getElementById("btnReservar").addEventListener("click", async () => {
+  try {
+    const abono = Number(document.getElementById("inputAbono").value);
+    const minAbono = state.courtPrice * 0.5;
+    
+    if (abono < minAbono) {
+      alert(`El monto de abono mínimo es de $${minAbono.toLocaleString('es-CL')}`);
+      return;
+    }
+    
+    const body = await apiFetch("/api/bookings", {
+      method: "POST",
+      body: JSON.stringify({
+        courtId: Number(state.courtId),
+        date: state.date,
+        startHour: Number(state.startHour),
+        depositAmount: abono
+      })
+    });
+    
+    state.bookingData = body.data;
+    
+    // Guardar ID de reserva en sesión
+    sessionStorage.setItem("ucn_test_booking_id", state.bookingData.id);
+    
+    marcarPaso("paso-reserva", "hecho");
+    marcarPaso("paso-pago", "activo");
+  } catch (err) {
+    alert("Error creando la reserva: " + err.message);
+  }
+});
+
+// Paso 7: Iniciar Pago en Webpay
+document.getElementById("btnIniciarPago").addEventListener("click", async () => {
+  try {
+    const bookingId = state.bookingData ? state.bookingData.id : sessionStorage.getItem("ucn_test_booking_id");
+    
+    const body = await apiFetch(`/api/transacciones/iniciar?returnType=SESSION_TEST`, {
+      method: "POST",
+      body: JSON.stringify({ bookingId: Number(bookingId) })
+    });
+    
+    const { token, urlRedireccion } = body.data;
+    const redirectUrlComplete = `${urlRedireccion}?token_ws=${token}`;
+
+    document.getElementById("formRedireccion").innerHTML = `
+      <a href="${redirectUrlComplete}" class="webpay-btn">
+        💳 Ir a Webpay Plus (Transbank Real)
+      </a>
+    `;
+    marcarPaso("paso-pago", "hecho");
+  } catch (err) {
+    alert("Error iniciando pago: " + err.message);
+  }
+});
+
+// Paso 8: Retorno y Verificación de Pago
+async function verificarRetornoPago() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const paymentStatus = urlParams.get('payment');
+  const bookingId = urlParams.get('bookingId');
+  const tokenWs = urlParams.get('token_ws');
+  
+  if (paymentStatus === 'success' && bookingId) {
+    // Recuperar JWT guardado antes de ir a Webpay
+    state.jwt = sessionStorage.getItem("ucn_test_jwt");
+    state.user = JSON.parse(sessionStorage.getItem("ucn_test_user") || "null");
+    
+    if (state.user) {
+      document.getElementById("infoUsuario").style.display = "block";
+      document.getElementById("infoUsuario").innerHTML = `
+        <strong>Sesión Iniciada con Google:</strong><br>
+        Nombre: ${state.user.firstName} ${state.user.lastName}<br>
+        Correo: ${state.user.email}
+      `;
+    }
+    
+    try {
+      // Consultar datos reales de la reserva en el backend
+      const res = await apiFetch(`/api/bookings/${bookingId}`);
+      const booking = res.data;
+      
+      // Mostrar comprobante finalizado
+      document.getElementById("comprobanteReserva").innerHTML = `
+        <strong>¡Transacción de Webpay Aceptada!</strong><br>
+        Código de Arriendo: <strong>#${booking.id}</strong><br>
+        Cancha: ${booking.courtName}<br>
+        Horario: ${booking.date} de ${booking.startHour}:00 a ${booking.endHour}:00 hrs<br>
+        Total a Pagar: $${booking.totalPrice.toLocaleString('es-CL')}<br>
+        Abono Procesado por Webpay: $${booking.depositAmount.toLocaleString('es-CL')}<br>
+        Monto Pendiente en Cancha: $${(booking.totalPrice - booking.depositAmount).toLocaleString('es-CL')}<br>
+        Estado de la Reserva: <span style="color: #10b981; font-weight:bold;">${booking.status} (Confirmado Automáticamente)</span>
+      `;
+      
+      document.getElementById("whatsappContainer").innerHTML = `
+        <a href="${booking.whatsAppLink}" target="_blank" class="whatsapp-btn">
+          📱 Enviar Comprobante y ticket por WhatsApp
+        </a>
+      `;
+      
+      // Marcar pasos previos como completados visualmente
+      marcarPaso("paso-cancha", "hecho");
+      marcarPaso("paso-fecha", "hecho");
+      marcarPaso("paso-franja", "hecho");
+      marcarPaso("paso-google", "hecho");
+      marcarPaso("paso-perfil", "hecho");
+      marcarPaso("paso-reserva", "hecho");
+      marcarPaso("paso-pago", "hecho");
+      marcarPaso("paso-confirmado", "hecho");
+      
+      // Limpiar sessionStorage
+      sessionStorage.clear();
+    } catch (err) {
+      alert("Error al cargar comprobante: " + err.message);
+    }
+  } else if (paymentStatus === 'cancel') {
+    alert("La transacción de Webpay fue cancelada o rechazada por el usuario.");
+    window.location.href = "/reserva-canchas-test.html";
+  }
+}
+
+cargarCanchas();
+</script>
+</body>
+</html>

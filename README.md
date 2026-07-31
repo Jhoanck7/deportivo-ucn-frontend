@@ -1,59 +1,108 @@
-# DeportivoUcnFrontend
+# DeportivoUCN Frontend
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.8.
+Web application for the DeportivoUCN management system, built with Angular and containerized with Docker.
 
-## Development server
+## Technologies
 
-To start a local development server, run:
+- Angular 20
+- TypeScript
+- Docker / Docker Compose
+- Nginx (production)
 
-```bash
-ng serve
+## Architecture
+
+The project follows the **Feature-based Architecture** recommended by Angular. Each feature of the application lives in its own isolated folder and does not depend on other features.
+
+```
+src/app/
+ ├── core/        → global, single-instance services and utilities
+ ├── shared/      → reusable components and models across features
+ └── features/    → each module of the application
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+| Folder | Responsibility |
+|---|---|
+| **core/** | Guards, interceptors, global services (auth, current user) |
+| **shared/** | Generic components (spinner, modal), pipes, TypeScript interfaces |
+| **features/** | Each functional module: auth, members, activities, dashboard |
 
-## Code scaffolding
+Each feature is self-contained:
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```
+features/members/
+ ├── components/
+ │    ├── member-list/
+ │    └── member-form/
+ ├── services/
+ │    └── members.service.ts    → calls the backend API
+ ├── models/
+ │    └── member.model.ts       → Member interface
+ └── members.routes.ts          → feature routes
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Project Structure
 
-```bash
-ng generate --help
+```
+deportivo-ucn-frontend/
+ ├── src/
+ │    ├── app/
+ │    │    ├── core/
+ │    │    │    ├── guards/
+ │    │    │    ├── interceptors/
+ │    │    │    └── services/
+ │    │    ├── shared/
+ │    │    │    ├── components/
+ │    │    │    ├── pipes/
+ │    │    │    └── models/
+ │    │    └── features/
+ │    │         ├── auth/
+ │    │         ├── dashboard/
+ │    │         └── ...
+ │    └── environments/
+ ├── Dockerfile
+ ├── docker-compose.yml
+ ├── docker-compose.override.yml
+ └── nginx.conf
 ```
 
-## Building
+## Requirements
 
-To build the project run:
+- Docker
+- Docker Compose
 
-```bash
-ng build
-```
+No need to install Node.js or Angular CLI on your machine.
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+## Running the project
 
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Development (hot reload)
 
 ```bash
-ng test
+docker compose up
 ```
 
-## Running end-to-end tests
+The app reloads automatically when code changes are detected. Available at:
 
-For end-to-end (e2e) testing, run:
+```
+http://localhost:4200
+```
+
+### Production
 
 ```bash
-ng e2e
+docker compose -f docker-compose.yml up --build
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+Available at:
 
-## Additional Resources
+```
+http://localhost:80
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Useful Commands
+
+```bash
+# See running containers
+docker compose ps
+
+# Stream logs
+docker compose logs -f

@@ -1,0 +1,48 @@
+<div class="dashboard-container">
+  <aside class="sidebar">
+    <div class="sidebar-brand" style="cursor: pointer;" routerLink="/home">
+      <div class="brand-logo" style="display: flex; align-items: center; gap: 0.6rem;">
+        <img src="/logo.jpg" alt="Logo Deportivo UCN" style="height: 38px; width: 38px; border-radius: 8px; object-fit: cover; border: 1.5px solid #1e3a8a;" />
+        <h1 style="font-size: 1.25rem; font-weight: 850;">Deportes UCN</h1>
+      </div>
+      <span class="brand-subtitle" style="display: block; margin-top: 0.25rem;">ADMINISTRADOR</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <ul>
+        <li>
+          <a routerLink="/dashboard-admin/overview" routerLinkActive="active">Panel Principal</a>
+        </li>
+        <li>
+          <a routerLink="/dashboard-admin/roster" routerLinkActive="active">Nóminas</a>
+        </li>
+        <li>
+          <a routerLink="/dashboard-admin/sport-branches" routerLinkActive="active">Ramas Deportivas</a>
+        </li>
+        <li>
+          <a routerLink="/dashboard-admin/news-events" routerLinkActive="active">Noticias y Eventos</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn btn-primary" (click)="addNewReservation()">Nueva Reserva</button>
+      <div class="footer-links">
+        <a class="footer-link-item logout-link" (click)="logout()" style="cursor: pointer;">Cerrar Sesión</a>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main-layout">
+    <header class="topbar">
+      <div class="topbar-spacer"></div>
+      <div class="topbar-right">
+        <button class="btn btn-whatsapp" (click)="onSupportClick()">WhatsApp Soporte</button>
+      </div>
+    </header>
+
+    <main class="content-viewport">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

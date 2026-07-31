@@ -1,27 +1,2 @@
-.contenedor-principal {
-  padding: 2rem;
-  font-family: sans-serif;
-  text-align: center;
-}
 
-.titulo {
-  color: #2563eb; /* Un azul bonito */
-}
-
-.caja-conexion {
-  margin-top: 2rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #f9fafb;
-}
-
-.mensaje-exito {
-  color: green;
-  font-weight: bold;
-}
-
-.mensaje-espera {
-  color: gray;
-  font-style: italic;
-}
+/* Root component styles */
