@@ -8,6 +8,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { CourtsService } from '../../../../features/courts/services/court.service';
 import { BookingsService } from '../../services/bookings.service';
 import { CreateBookingRequest } from '../../../../shared/models/booking.model';
+import { environment } from '../../../../../environments/environment';
 
 interface TimeSlot {
   time: string;
