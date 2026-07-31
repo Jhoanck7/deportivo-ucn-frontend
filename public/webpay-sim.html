@@ -87,6 +87,7 @@ const bookingId = Number(urlParams.get('bookingId')) || 0;
 const amount = Number(urlParams.get('amount')) || 0;
 const courtName = urlParams.get('court') || 'Cancha';
 const returnUrl = urlParams.get('returnUrl') || 'http://localhost:4200/rent';
+const apiUrl = urlParams.get('apiUrl') || 'http://localhost:5059';
 
 document.getElementById('desc-cancha').textContent = courtName;
 document.getElementById('desc-orden').textContent = `#${bookingId}`;
@@ -103,7 +104,7 @@ async function pagar() {
   document.getElementById('payment-loader').style.display = 'block';
 
   try {
-    const response = await fetch("http://localhost:5059/api/transacciones/confirmar", {
+    const response = await fetch(`${apiUrl}/api/transacciones/confirmar`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
