@@ -39,5 +39,10 @@ jobs:
 
     - name: Restart Docker Containers
       run: |
-        docker compose down
-        docker compose up -d --build
+        if command -v docker-compose &> /dev/null; then
+          docker-compose down
+          docker-compose up -d --build
+        else
+          docker compose down
+          docker compose up -d --build
+        fi
