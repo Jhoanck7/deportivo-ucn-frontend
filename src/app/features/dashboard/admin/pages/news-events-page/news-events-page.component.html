@@ -24,14 +24,14 @@
       [class.active]="activeTab() === 'news'"
       (click)="setTab('news')"
     >
-      📰 Noticias y Artículos
+      Noticias y Artículos
     </button>
     <button 
       class="tab-btn" 
       [class.active]="activeTab() === 'events'"
       (click)="setTab('events')"
     >
-      📅 Eventos y Convocatorias
+      Eventos y Convocatorias
     </button>
   </div>
 
@@ -41,7 +41,7 @@
     </div>
   } @else {
     
-    <!-- 📰 PESTAÑA NOTICIAS -->
+    <!-- PESTAÑA NOTICIAS -->
     @if (activeTab() === 'news') {
       <section class="table-card">
         <div class="card-header table-card-header">
@@ -90,7 +90,7 @@
       </section>
     }
 
-    <!-- 📅 PESTAÑA EVENTOS -->
+    <!-- PESTAÑA EVENTOS -->
     @if (activeTab() === 'events') {
       <section class="table-card">
         <div class="card-header table-card-header">

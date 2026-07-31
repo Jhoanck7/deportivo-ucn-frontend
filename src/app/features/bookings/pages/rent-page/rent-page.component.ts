@@ -201,9 +201,19 @@ export class RentPageComponent implements OnInit {
             this.bookingLoading.set(false);
             const data = paymentRes.data;
             if (data && data.urlRedireccion && data.token) {
-              // 3. Redirigir a la pasarela de pagos REAL de Transbank (Ambiente de Integración)
-              const redirectUrl = `${data.urlRedireccion}?token_ws=${data.token}`;
-              window.location.href = redirectUrl;
+              // 3. Redirigir a la pasarela de pagos REAL de Transbank mediante un Form POST (Requerido por Webpay)
+              const form = document.createElement('form');
+              form.method = 'POST';
+              form.action = data.urlRedireccion;
+
+              const input = document.createElement('input');
+              input.type = 'hidden';
+              input.name = 'token_ws';
+              input.value = data.token;
+
+              form.appendChild(input);
+              document.body.appendChild(form);
+              form.submit();
             } else {
               this.bookingError.set('Error al iniciar la transacción con la pasarela de Transbank.');
             }
