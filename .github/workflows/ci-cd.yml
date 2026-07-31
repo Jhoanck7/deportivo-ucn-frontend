@@ -30,7 +30,7 @@ jobs:
   deploy:
     name: Continuous Deployment (CD)
     needs: build
-    runs-on: [self-hosted, linux, frontend-vm]
+    runs-on: [self-hosted, deportivo-ucn-frontend]
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/refactor/user-view'
 
     steps:
