@@ -2,7 +2,7 @@ name: Frontend CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main", "refactor/user-view" ]
+    branches: [ "main", "dev", "refactor/user-view" ]
   pull_request:
     branches: [ "main" ]
 
@@ -31,7 +31,7 @@ jobs:
     name: Continuous Deployment (CD)
     needs: build
     runs-on: [self-hosted, deportivo-ucn-frontend]
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/refactor/user-view'
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/refactor/user-view'
 
     steps:
     - name: Checkout Code on VM
