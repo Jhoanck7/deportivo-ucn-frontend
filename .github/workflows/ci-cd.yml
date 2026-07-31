@@ -2,7 +2,7 @@ name: Frontend CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main", "refactor/user-view" ]
+    branches: [ "main", "dev", "refactor/user-view" ]
   pull_request:
     branches: [ "main" ]
 
@@ -30,17 +30,19 @@ jobs:
   deploy:
     name: Continuous Deployment (CD)
     needs: build
-    runs-on: [self-hosted, linux, frontend-vm]
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/refactor/user-view'
+    runs-on: [self-hosted, deportivo-ucn-frontend]
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/refactor/user-view'
 
     steps:
     - name: Checkout Code on VM
       uses: actions/checkout@v4
 
-    - name: Deploy Static Files to Nginx Root
+    - name: Restart Docker Containers
       run: |
-        # Asumiendo que compila en la VM o copia los archivos estáticos a la ruta de Nginx
-        npm ci
-        npm run build -- --configuration=production
-        sudo cp -r dist/deportivo-ucn-frontend/browser/* /var/www/html/
-        sudo systemctl restart nginx || true
+        if command -v docker-compose &> /dev/null; then
+          docker-compose down
+          docker-compose up -d --build
+        else
+          docker compose down
+          docker compose up -d --build
+        fi

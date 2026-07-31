@@ -8,6 +8,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { CourtsService } from '../../../../features/courts/services/court.service';
 import { BookingsService } from '../../services/bookings.service';
 import { CreateBookingRequest } from '../../../../shared/models/booking.model';
+import { environment } from '../../../../../environments/environment';
 
 interface TimeSlot {
   time: string;
@@ -201,9 +202,28 @@ export class RentPageComponent implements OnInit {
             this.bookingLoading.set(false);
             const data = paymentRes.data;
             if (data && data.urlRedireccion && data.token) {
-              // 3. Redirigir a la pasarela de pagos REAL de Transbank (Ambiente de Integración)
-              const redirectUrl = `${data.urlRedireccion}?token_ws=${data.token}`;
-              window.location.href = redirectUrl;
+              if (data.urlRedireccion.startsWith('/') || !data.urlRedireccion.startsWith('http')) {
+                // 3a. Redirigir al simulador local con los datos necesarios en la URL
+                const apiBase = environment.apiUrl.replace('/api', '');
+                const returnUrl = `${window.location.origin}/rent`;
+                const courtEncoded = encodeURIComponent(data.courtName || 'Cancha');
+                const redirectUrl = `${window.location.origin}${data.urlRedireccion}?token_ws=${data.token}&bookingId=${bookingId}&amount=${data.amount}&court=${courtEncoded}&returnUrl=${encodeURIComponent(returnUrl)}&apiUrl=${encodeURIComponent(apiBase)}`;
+                window.location.href = redirectUrl;
+              } else {
+                // 3b. Redirigir a la pasarela de pagos REAL de Transbank mediante un Form POST
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = data.urlRedireccion;
+
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'token_ws';
+                input.value = data.token;
+
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+              }
             } else {
               this.bookingError.set('Error al iniciar la transacción con la pasarela de Transbank.');
             }

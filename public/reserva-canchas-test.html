@@ -319,13 +319,13 @@ document.getElementById("btnIniciarPago").addEventListener("click", async () => 
       body: JSON.stringify({ bookingId: Number(bookingId) })
     });
     
-    const { token, urlRedireccion } = body.data;
-    const redirectUrlComplete = `${urlRedireccion}?token_ws=${token}`;
-
     document.getElementById("formRedireccion").innerHTML = `
-      <a href="${redirectUrlComplete}" class="webpay-btn">
-        💳 Ir a Webpay Plus (Transbank Real)
-      </a>
+      <form action="${urlRedireccion}" method="POST">
+        <input type="hidden" name="token_ws" value="${token}" />
+        <button type="submit" class="webpay-btn" style="border:none; cursor:pointer;">
+          💳 Ir a Webpay Plus (Transbank Real)
+        </button>
+      </form>
     `;
     marcarPaso("paso-pago", "hecho");
   } catch (err) {
