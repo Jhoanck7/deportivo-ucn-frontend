@@ -37,10 +37,7 @@ jobs:
     - name: Checkout Code on VM
       uses: actions/checkout@v4
 
-    - name: Deploy Static Files to Nginx Root
+    - name: Restart Docker Containers
       run: |
-        # Asumiendo que compila en la VM o copia los archivos estáticos a la ruta de Nginx
-        npm ci
-        npm run build -- --configuration=production
-        sudo cp -r dist/deportivo-ucn-frontend/browser/* /var/www/html/
-        sudo systemctl restart nginx || true
+        docker compose down
+        docker compose up -d --build
